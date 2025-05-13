@@ -27,6 +27,10 @@ public class App {
         return Base64.getEncoder().encodeToString(bytes);
     }
 
+    public static byte[] decode(String s) {
+        return Base64.getDecoder().decode(s);
+    }
+
     public static void presentDeck(byte[] bytes) {
         // Alternatively, StringJoiner and for loop.
         System.out.println(
