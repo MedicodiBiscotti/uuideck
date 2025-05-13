@@ -1,5 +1,6 @@
 package dk.kavv.uuideck;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -57,5 +58,21 @@ public class App {
             default -> throw new IllegalStateException("Unexpected value: " + suit);
         };
         return res;
+    }
+
+    public static long stringToLong(String s) {
+        /*
+         Will discard when overflowing a long.
+         Could also String concat binary and parse long.
+         BitSet.toLongArray() is little-endian (LE). Least significant byte first.
+         Concat could be whatever I want, but the most intuitive is big-endian (BE),
+         so be mindful that the results are different.
+        */
+        if (s.isEmpty()) {
+            return 0L;
+        }
+        byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
+        BitSet bs = BitSet.valueOf(bytes);
+        return bs.toLongArray()[0];
     }
 }
