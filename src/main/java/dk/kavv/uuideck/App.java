@@ -1,78 +1,23 @@
 package dk.kavv.uuideck;
 
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import dk.kavv.uuideck.decks.DeckGenerator;
+import dk.kavv.uuideck.decks.RunningIntegerDeck;
+import dk.kavv.uuideck.encoding.EightBitBase64Encoder;
+import dk.kavv.uuideck.encoding.Encoder;
+
+import java.util.Arrays;
+import java.util.Random;
 
 public class App {
     public static void main(String[] args) {
-        byte[] bytes = generateDeck(new Random());
-        System.out.println(Arrays.toString(bytes));
-        presentDeck(bytes);
-        String encoded = encode(bytes);
+        DeckGenerator deckGenerator = new RunningIntegerDeck();
+        Encoder encoder = new EightBitBase64Encoder();
+
+        byte[] deck = deckGenerator.generate(new Random());
+        System.out.println(Arrays.toString(deck));
+        deckGenerator.present(deck);
+
+        String encoded = encoder.encode(deck);
         System.out.println(encoded);
-    }
-
-    public static byte[] generateDeck(Random r) {
-        List<Integer> deck = new ArrayList<>(IntStream.range(0, 52).boxed().toList());
-        Collections.shuffle(deck, r);
-        byte[] bytes = new byte[deck.size()];
-        for (int i = 0; i < deck.size(); i++) {
-            bytes[i] = deck.get(i).byteValue();
-        }
-        return bytes;
-    }
-
-    public static String encode(byte[] bytes) {
-        return Base64.getEncoder().encodeToString(bytes);
-    }
-
-    public static byte[] decode(String s) {
-        return Base64.getDecoder().decode(s);
-    }
-
-    public static void presentDeck(byte[] bytes) {
-        // Alternatively, StringJoiner and for loop.
-        System.out.println(
-                IntStream.range(0, bytes.length)
-                        .mapToObj(i -> toCard(bytes[i]))
-                        .collect(Collectors.joining(", ")));
-    }
-
-    public static String toCard(byte b) {
-        int suit = b / 13;
-        int rank = b % 13;
-        String res = switch (rank) {
-            case 0 -> "A";
-            case 10 -> "J";
-            case 11 -> "Q";
-            case 12 -> "K";
-            default -> String.valueOf(rank + 1);
-        };
-        res += switch (suit) {
-            case 0 -> "S";
-            case 1 -> "C";
-            case 2 -> "D";
-            case 3 -> "H";
-            default -> throw new IllegalStateException("Unexpected value: " + suit);
-        };
-        return res;
-    }
-
-    public static long stringToLong(String s) {
-        /*
-         Will discard when overflowing a long.
-         Could also String concat binary and parse long.
-         BitSet.toLongArray() is little-endian (LE). Least significant byte first.
-         Concat could be whatever I want, but the most intuitive is big-endian (BE),
-         so be mindful that the results are different.
-        */
-        if (s.isEmpty()) {
-            return 0L;
-        }
-        byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
-        BitSet bs = BitSet.valueOf(bytes);
-        return bs.toLongArray()[0];
     }
 }
