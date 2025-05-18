@@ -41,7 +41,7 @@ public class RunningIntegerDeck implements DeckGenerator {
             case 1 -> "C";
             case 2 -> "D";
             case 3 -> "H";
-            default -> throw new IllegalStateException("Unexpected value: " + suit);
+            default -> throw new IllegalArgumentException("Unexpected value: " + suit);
         };
         return res;
     }
