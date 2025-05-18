@@ -1,10 +1,11 @@
 package dk.kavv.uuideck.decks;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RunningIntegerDeckTest {
     private final RunningIntegerDeck deckGenerator = new RunningIntegerDeck();
@@ -18,6 +19,32 @@ class RunningIntegerDeckTest {
     }
 
     @Test
-    void toCard() {
+    void lowestValueToCard() {
+        assertEquals("AS", deckGenerator.toCard((byte) 0));
+    }
+
+    @Test
+    void lowestValueOfHigherSuitToCard() {
+        assertEquals("AC", deckGenerator.toCard((byte) 13));
+    }
+
+    @Test
+    void highestValueToCard() {
+        assertEquals("KH", deckGenerator.toCard((byte) 51));
+    }
+
+    @Test
+    @Disabled("Not sure I want to implement a guard for this until necessary")
+    void negativeValueThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            deckGenerator.toCard((byte) -1);
+        });
+    }
+
+    @Test
+    void tooHighValueThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            deckGenerator.toCard((byte) 52);
+        });
     }
 }
