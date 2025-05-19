@@ -21,6 +21,8 @@ public class App implements Callable<Integer> {
     private final Encoder encoder = new EightBitBase64Encoder();
     @Option(names = {"-s", "--seed-string"})
     private String seedString;
+    @Option(names = {"-d", "--decode"})
+    private String encoded;
 
     public static void main(String[] args) {
         int exitCode = new CommandLine(new App()).execute(args);
@@ -29,6 +31,20 @@ public class App implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
+        if (encoded != null) {
+            decodeDeck(encoded);
+        } else {
+            generateDeck();
+        }
+        return ExitCode.OK;
+    }
+
+    public void decodeDeck(String in) {
+        byte[] deck = encoder.decode(in);
+        deckGenerator.present(deck);
+    }
+
+    public void generateDeck() {
         Random r;
         if (seedString != null) {
             StringSeedGenerator seedGenerator = new StringSeedGenerator();
@@ -44,6 +60,5 @@ public class App implements Callable<Integer> {
         String encoded = encoder.encode(deck);
         System.out.println(encoded);
 
-        return ExitCode.OK;
     }
 }
