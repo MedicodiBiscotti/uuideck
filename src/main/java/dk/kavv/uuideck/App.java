@@ -4,6 +4,7 @@ import dk.kavv.uuideck.decks.DeckGenerator;
 import dk.kavv.uuideck.decks.RunningIntegerDeck;
 import dk.kavv.uuideck.encoding.EightBitBase64Encoder;
 import dk.kavv.uuideck.encoding.Encoder;
+import dk.kavv.uuideck.random.StringSeedGenerator;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -11,8 +12,16 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
+import static picocli.CommandLine.ExitCode;
+import static picocli.CommandLine.Option;
+
 @Command(name = "uuideck", mixinStandardHelpOptions = true)
 public class App implements Callable<Integer> {
+    private final DeckGenerator deckGenerator = new RunningIntegerDeck();
+    private final Encoder encoder = new EightBitBase64Encoder();
+    @Option(names = {"-s", "--seed-string"})
+    private String seedString;
+
     public static void main(String[] args) {
         int exitCode = new CommandLine(new App()).execute(args);
         System.exit(exitCode);
@@ -20,16 +29,21 @@ public class App implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        DeckGenerator deckGenerator = new RunningIntegerDeck();
-        Encoder encoder = new EightBitBase64Encoder();
+        Random r;
+        if (seedString != null) {
+            StringSeedGenerator seedGenerator = new StringSeedGenerator();
+            r = new Random(seedGenerator.generate(seedString));
+        } else {
+            r = new Random();
+        }
 
-        byte[] deck = deckGenerator.generate(new Random());
+        byte[] deck = deckGenerator.generate(r);
         System.out.println(Arrays.toString(deck));
         deckGenerator.present(deck);
 
         String encoded = encoder.encode(deck);
         System.out.println(encoded);
 
-        return CommandLine.ExitCode.OK;
+        return ExitCode.OK;
     }
 }
