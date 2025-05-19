@@ -21,6 +21,8 @@ public class App implements Callable<Integer> {
     private final Encoder encoder = new EightBitBase64Encoder();
     @Option(names = {"-s", "--seed-string"})
     private String seedString;
+    @Option(names = {"-n", "--seed-number"})
+    private Long seedNumber;
     @Option(names = {"-d", "--decode"})
     private String encoded;
 
@@ -49,6 +51,8 @@ public class App implements Callable<Integer> {
         if (seedString != null) {
             StringSeedGenerator seedGenerator = new StringSeedGenerator();
             r = new Random(seedGenerator.generate(seedString));
+        } else if (seedNumber != null) {
+            r = new Random(seedNumber);
         } else {
             r = new Random();
         }
