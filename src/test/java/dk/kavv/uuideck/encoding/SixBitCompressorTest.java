@@ -14,4 +14,12 @@ class SixBitCompressorTest {
         byte[] expected = {65, 16, 4};
         assertArrayEquals(expected, out);
     }
+
+    @Test
+    void decompress() {
+        byte[] in = {65, 16, 4};
+        byte[] out = compressor.decompress(in);
+        byte[] expected = {1, 1, 1, 1};
+        assertArrayEquals(expected, out);
+    }
 }

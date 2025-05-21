@@ -20,4 +20,21 @@ public class SixBitCompressor {
         }
         return bits.toByteArray();
     }
+
+    public byte[] decompress(byte[] compressed) {
+        BitSet bits = BitSet.valueOf(compressed);
+        byte[] deck = new byte[compressed.length * 4 / 3];
+        int start = 0;
+        for (int i = 0; i < deck.length; i++) {
+            byte val = 0;
+            for (int j = 0; j < 6; j++) {
+                if (bits.get(start + j)) {
+                    val |= (byte) (1 << j);
+                }
+            }
+            deck[i] = val;
+            start += 6;
+        }
+        return deck;
+    }
 }
