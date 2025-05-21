@@ -4,10 +4,10 @@ import java.util.Base64;
 
 public class EightBitBase64Encoder implements Encoder {
     public String encode(byte[] bytes) {
-        return Base64.getEncoder().encodeToString(bytes);
+        return Base64.getUrlEncoder().encodeToString(bytes);
     }
 
     public byte[] decode(String s) {
-        return Base64.getDecoder().decode(s);
+        return Base64.getUrlDecoder().decode(s);
     }
 }
