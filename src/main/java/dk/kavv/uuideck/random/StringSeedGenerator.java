@@ -1,7 +1,6 @@
 package dk.kavv.uuideck.random;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.BitSet;
 
 public class StringSeedGenerator implements SeedGenerator<String> {
@@ -19,7 +18,6 @@ public class StringSeedGenerator implements SeedGenerator<String> {
             return 0L;
         }
         byte[] bytes = in.getBytes(StandardCharsets.UTF_8);
-        System.out.println(Arrays.toString(bytes));
         BitSet bs = BitSet.valueOf(bytes);
         return bs.toLongArray()[0];
     }
