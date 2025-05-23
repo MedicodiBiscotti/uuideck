@@ -2,9 +2,10 @@ package dk.kavv.uuideck;
 
 import dk.kavv.uuideck.decks.DeckGenerator;
 import dk.kavv.uuideck.decks.RunningIntegerDeck;
-import dk.kavv.uuideck.encoding.EightBitBase64Encoder;
 import dk.kavv.uuideck.encoding.Encoder;
+import dk.kavv.uuideck.encoding.EncoderType;
 import dk.kavv.uuideck.encoding.SixBitCompressor;
+import dk.kavv.uuideck.pipeline.PipelineFactory;
 import dk.kavv.uuideck.random.StringSeedGenerator;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -18,14 +19,17 @@ import static picocli.CommandLine.Option;
 @Command(name = "uuideck", mixinStandardHelpOptions = true)
 public class App implements Callable<Integer> {
     private final DeckGenerator deckGenerator = new RunningIntegerDeck();
-    private final Encoder encoder = new EightBitBase64Encoder();
     private final SixBitCompressor compressor = new SixBitCompressor();
+    private Encoder encoder;
     @Option(names = {"-s", "--seed-string"})
     private String seedString;
     @Option(names = {"-n", "--seed-number"})
     private Long seedNumber;
     @Option(names = {"-d", "--decode"})
     private String encoded;
+    // Default values could be here in simple cases, but the logic will get much more complicated, so it's in the PipelineFactory.
+    @Option(names = {"-e", "--encoder"}, description = "${COMPLETION-CANDIDATES}")
+    private EncoderType encoderType;
 
     public static void main(String[] args) {
         int exitCode = new CommandLine(new App()).execute(args);
@@ -34,6 +38,7 @@ public class App implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
+        encoder = PipelineFactory.getEncoder(encoderType);
         if (encoded != null) {
             decodeDeck(encoded);
         } else {
