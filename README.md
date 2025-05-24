@@ -21,10 +21,13 @@ This only needs to be done once (unless the function get updated). If only the a
 command:
 
 ```shell
+java -cp target/uuideck.jar picocli.AutoComplete dk.kavv.uuideck.App --force
+mv -f uuideck_completion ~
 cat << 'EOF' >> ~/.bashrc
 uuideck() {
   java -jar ~/uuideck.jar "$@"
 }
+. ./uuideck_completion
 EOF
 ```
 
