@@ -5,11 +5,17 @@ import dk.kavv.uuideck.decks.RunningIntegerDeck;
 import dk.kavv.uuideck.encoding.Encoder;
 import dk.kavv.uuideck.encoding.EncoderType;
 import dk.kavv.uuideck.encoding.SixBitCompressor;
+import dk.kavv.uuideck.pipeline.Components;
 import dk.kavv.uuideck.pipeline.ComponentsFactory;
+import dk.kavv.uuideck.pipeline.IncompatibleComponentsException;
 import dk.kavv.uuideck.random.StringSeedGenerator;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Model.CommandSpec;
+import picocli.CommandLine.ParameterException;
+import picocli.CommandLine.Spec;
 
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
@@ -18,18 +24,25 @@ import static picocli.CommandLine.Option;
 
 @Command(name = "uuideck", mixinStandardHelpOptions = true)
 public class App implements Callable<Integer> {
-    private final DeckGenerator deckGenerator = new RunningIntegerDeck();
-    private final SixBitCompressor compressor = new SixBitCompressor();
-    private Encoder encoder;
+    @Spec
+    private CommandSpec spec;
     @Option(names = {"-s", "--seed-string"})
     private String seedString;
     @Option(names = {"-n", "--seed-number"})
     private Long seedNumber;
     @Option(names = {"-d", "--decode"})
     private String encoded;
-    // Default values could be here in simple cases, but the logic will get much more complicated, so it's in the PipelineFactory.
-    @Option(names = {"-e", "--encoder"}, description = "${COMPLETION-CANDIDATES}")
+
+    // Component options
+    // Default values could be here in simple cases, but the logic will get much more complicated, so it's in the ComponentsFactory.
+    @Option(names = {"-e", "--encoder"}, description = "Options: ${COMPLETION-CANDIDATES}\nDefault: base64")
     private EncoderType encoderType;
+    @Option(names = {"-c", "--compression"}, negatable = true, description = "Default: true")
+    private Optional<Boolean> doCompression;
+
+    private DeckGenerator deckGenerator = new RunningIntegerDeck();
+    private Optional<SixBitCompressor> compressor;
+    private Encoder encoder;
 
     public static void main(String[] args) {
         int exitCode = new CommandLine(new App()).execute(args);
@@ -38,7 +51,13 @@ public class App implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        encoder = ComponentsFactory.getEncoder(encoderType);
+        try {
+            Components components = ComponentsFactory.getComponents(doCompression, encoderType);
+            encoder = components.getEncoder();
+            compressor = components.getCompressor();
+        } catch (IncompatibleComponentsException e) {
+            throw new ParameterException(spec.commandLine(), String.join("\n", e.getErrors()));
+        }
         if (encoded != null) {
             decodeDeck(encoded);
         } else {
@@ -49,7 +68,9 @@ public class App implements Callable<Integer> {
 
     public void decodeDeck(String in) {
         byte[] deck = encoder.decode(in);
-        deck = compressor.decompress(deck);
+        if (compressor.isPresent()) {
+            deck = compressor.get().decompress(deck);
+        }
         deckGenerator.present(deck);
     }
 
@@ -66,8 +87,10 @@ public class App implements Callable<Integer> {
 
         byte[] deck = deckGenerator.generate(r);
         deckGenerator.present(deck);
-        byte[] compressed = compressor.compress(deck);
-        String encoded = encoder.encode(compressed);
+        if (compressor.isPresent()) {
+            deck = compressor.get().compress(deck);
+        }
+        String encoded = encoder.encode(deck);
         System.out.println(encoded);
     }
 }
