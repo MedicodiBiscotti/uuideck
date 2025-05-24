@@ -13,7 +13,8 @@ Sorry for cluttering the user folder, but it's the simplest way to just "put it 
 
 ```shell
 mvn clean package
-cp -f target/uuideck.jar ~
+[ -d ~/uuideck ] || mkdir ~/uuideck
+cp -f target/{uuideck.jar,uuideck_completion} ~/uuideck
 ```
 
 The final step appends a wrapper function `~/.bashrc`.
@@ -21,13 +22,11 @@ This only needs to be done once (unless the function get updated). If only the a
 command:
 
 ```shell
-java -cp target/uuideck.jar picocli.AutoComplete dk.kavv.uuideck.App --force
-mv -f uuideck_completion ~
 cat << 'EOF' >> ~/.bashrc
 uuideck() {
-  java -jar ~/uuideck.jar "$@"
+  java -jar ~/uuideck/uuideck.jar "$@"
 }
-. ./uuideck_completion
+. ~/uuideck/uuideck_completion
 EOF
 ```
 
