@@ -5,7 +5,7 @@ import dk.kavv.uuideck.decks.RunningIntegerDeck;
 import dk.kavv.uuideck.encoding.Encoder;
 import dk.kavv.uuideck.encoding.EncoderType;
 import dk.kavv.uuideck.encoding.SixBitCompressor;
-import dk.kavv.uuideck.pipeline.PipelineFactory;
+import dk.kavv.uuideck.pipeline.ComponentsFactory;
 import dk.kavv.uuideck.random.StringSeedGenerator;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -38,7 +38,7 @@ public class App implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        encoder = PipelineFactory.getEncoder(encoderType);
+        encoder = ComponentsFactory.getEncoder(encoderType);
         if (encoded != null) {
             decodeDeck(encoded);
         } else {
