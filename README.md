@@ -11,26 +11,39 @@ Ever wanted to generate a UUID that doubles as a deck of cards?
 
 Sorry for cluttering the user folder, but it's the simplest way to just "put it somewhere".
 
+The installation happens as part of the Maven build process. It goes like this:
+
+1. Build and package the fat jar.
+2. Generate shell completion script.
+3. Make a target folder if it doesn't already exist.
+4. Copy the artifacts (jar and completion).
+5. Append wrapper function to `~/.bashrc` and source completion.
+
+The full script is in `scripts/install.sh`. Here are the parts explained.
+
+This command generates the completion script. It's done as part of the `package` step in Maven as suggested by the
+documentation.
+
 ```shell
-mvn clean package
+java -cp target/uuideck.jar picocli.AutoComplete --force dk.kavv.uuideck.App
+```
+
+Copying is done with this:
+
+```shell
 [ -d ~/uuideck ] || mkdir ~/uuideck
 cp -f target/{uuideck.jar,uuideck_completion} ~/uuideck
 ```
 
-The final step appends a wrapper function `~/.bashrc`.
-This only needs to be done once (unless the function get updated). If only the actual program changes, omit this final
-command:
+The final step appends a wrapper function to `~/.bashrc`.
+This only needs to be done once (unless the function get updated). It'll only execute if the file doesn't already
+contain `uuideck`.
 
 ```shell
-cat << 'EOF' >> ~/.bashrc
+grep uuideck --quiet ~/.bashrc || cat << 'EOF' >> ~/.bashrc
 uuideck() {
   java -jar ~/uuideck/uuideck.jar "$@"
 }
 . ~/uuideck/uuideck_completion
 EOF
 ```
-
-Copying the artifact could easily be a build step, but appending the wrapper functions would be more difficult using a
-Maven plugin.
-
-Alternatively, you could have a wrapper script in a `scripts` directory and add it to `PATH`.

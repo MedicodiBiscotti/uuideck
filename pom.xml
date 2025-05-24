@@ -104,21 +104,34 @@
                         <goals>
                             <goal>exec</goal>
                         </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-Dpicocli.autocomplete.systemExitOnError</argument>
+                                <argument>-cp</argument>
+                                <classpath/>
+                                <argument>picocli.AutoComplete</argument>
+                                <argument>--force</argument><!-- overwrite if exists -->
+                                <argument>--completionScript</argument>
+                                <argument>${project.build.directory}/uuideck_completion</argument>
+                                <argument>dk.kavv.uuideck.App</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>sh</executable>
+                            <arguments>
+                                <argument>scripts/install.sh</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <executable>java</executable>
-                    <arguments>
-                        <argument>-Dpicocli.autocomplete.systemExitOnError</argument>
-                        <argument>-cp</argument>
-                        <classpath/>
-                        <argument>picocli.AutoComplete</argument>
-                        <argument>--force</argument><!-- overwrite if exists -->
-                        <argument>--completionScript</argument>
-                        <argument>${project.build.directory}/uuideck_completion</argument>
-                        <argument>dk.kavv.uuideck.App</argument>
-                    </arguments>
-                </configuration>
             </plugin>
         </plugins>
     </build>
