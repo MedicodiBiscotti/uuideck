@@ -7,6 +7,24 @@ And ~99.999% of those are solvable games of FreeCell.
 
 Ever wanted to generate a UUID that doubles as a deck of cards?
 
+## Planned features
+
+- [x] Basic running integer deck
+  generation ([Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle))
+- [x] Base64 encoding
+- [x] 6-bit compression
+- [x] ASCII encoding
+- [x] Seed random generation
+    - [x] Number (64-bit)
+    - [x] String (first 8 bytes)
+- [ ] Raw encoding showing underlying raw data
+- [ ] "Suit-signed" 6-bit deck generation (first 2 bits denote the suit)
+- [ ] [Factoradic](https://en.wikipedia.org/wiki/Factorial_number_system) deck generation
+    - [ ] Permutation index first
+    - [ ] Factoradic first
+- [ ] JSON format
+- [ ] File output
+
 ## Install
 
 Sorry for cluttering the user folder, but it's the simplest way to just "put it somewhere".
