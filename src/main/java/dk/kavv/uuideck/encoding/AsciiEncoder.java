@@ -3,7 +3,13 @@ package dk.kavv.uuideck.encoding;
 import java.nio.charset.StandardCharsets;
 
 public class AsciiEncoder implements Encoder {
-    private static final byte BASE_ASCII_VALUE = 33;
+    /*
+    33: Special characters after space
+    40: Special characters after quotes
+    48: Numbers (incl. some special characters)
+    65: Letters
+     */
+    private static final byte BASE_ASCII_VALUE = 40;
 
     @Override
     public String encode(byte[] bytes) {

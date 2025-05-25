@@ -5,20 +5,20 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AsciiEncoderTest {
+class AsciiEncoderAfterQuoteTest {
     private final AsciiEncoder encoder = new AsciiEncoder();
 
     @Test
     void encode() {
         byte[] bytes = {0, 1, 2, 3};
         String actual = encoder.encode(bytes);
-        String expected = "!\"#$";
+        String expected = "()*+";
         assertEquals(expected, actual);
     }
 
     @Test
     void decode() {
-        String in = "!\"#$";
+        String in = "()*+";
         byte[] actual = encoder.decode(in);
         byte[] expected = {0, 1, 2, 3};
         assertArrayEquals(expected, actual);
@@ -28,13 +28,13 @@ class AsciiEncoderTest {
     void encodeWholeDeck() {
         byte[] bytes = {47, 24, 25, 36, 15, 43, 51, 9, 23, 5, 34, 18, 48, 10, 31, 30, 39, 41, 42, 20, 37, 46, 1, 12, 7, 13, 38, 40, 19, 14, 6, 8, 32, 3, 0, 4, 27, 17, 50, 33, 16, 49, 26, 45, 21, 35, 22, 11, 2, 29, 28, 44};
         String actual = encoder.encode(bytes);
-        String expected = "P9:E0LT*8&C3Q+@?HJK5FO\"-(.GI4/')A$!%<2SB1R;N6D7,#>=M";
+        String expected = "W@AL7S[1?-J:X2GFOQR<MV)4/5NP;6.0H+(,C9ZI8YBU=K>3*EDT";
         assertEquals(expected, actual);
     }
 
     @Test
     void decodeWholeDeck() {
-        String in = "P9:E0LT*8&C3Q+@?HJK5FO\"-(.GI4/')A$!%<2SB1R;N6D7,#>=M";
+        String in = "W@AL7S[1?-J:X2GFOQR<MV)4/5NP;6.0H+(,C9ZI8YBU=K>3*EDT";
         byte[] actual = encoder.decode(in);
         byte[] expected = {47, 24, 25, 36, 15, 43, 51, 9, 23, 5, 34, 18, 48, 10, 31, 30, 39, 41, 42, 20, 37, 46, 1, 12, 7, 13, 38, 40, 19, 14, 6, 8, 32, 3, 0, 4, 27, 17, 50, 33, 16, 49, 26, 45, 21, 35, 22, 11, 2, 29, 28, 44};
         assertArrayEquals(expected, actual);
