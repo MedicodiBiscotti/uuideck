@@ -21,11 +21,6 @@ jobs:
       - name: Build with Maven
         run: mvn -B package
       - name: Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            target/uuideck.jar
-            target/uuideck_completion
-          #          generate_release_notes: true
-          body: ${{ github.event.head_commit.message }}
-          make_latest: legacy
+        run: |
+          gh release create ${{ github.ref_name }} --notes-from-tag
+          gh release upload ${{ github.ref_name }} target/uuideck.jar target/uuideck_completion
