@@ -22,5 +22,6 @@ jobs:
           files: |
             target/uuideck.jar
             target/uuideck_completion
-          generate_release_notes: true
+          #          generate_release_notes: true
+          body: ${{ github.event.head_commit.message }}
           make_latest: legacy
