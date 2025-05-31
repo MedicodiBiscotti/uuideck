@@ -12,19 +12,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-tags: true
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+
       - name: Build with Maven
         run: mvn -B package
-      - name: Release
-        env:
-          GH_TOKEN: ${{ github.token }}
+
+      - name: Get tag info
+        id: tag
         run: |
-          gh release create ${{ github.ref_name }} --notes-from-tag
-          gh release upload ${{ github.ref_name }} target/uuideck.jar target/uuideck_completion
+          git fetch -f origin tag ${{ github.ref_name }}
+          echo "msg=$(git tag -l --format='%(contents)' ${{ github.ref_name }})" >> "$GITHUB_OUTPUT"
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            target/uuideck.jar
+            target/uuideck_completion
+          body: ${{ steps.tag.outputs.msg }}
+          generate_release_notes: true
+          make_latest: legacy
