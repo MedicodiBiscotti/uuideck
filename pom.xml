@@ -4,7 +4,7 @@
 
     <groupId>dk.kavv.uuideck</groupId>
     <artifactId>uuideck</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.3.2</version>
     <packaging>jar</packaging>
 
     <name>uuideck</name>
@@ -13,6 +13,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
+        <!--Format doesn't work-->
+        <!--<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>-->
+        <copyright.year>2025</copyright.year>
     </properties>
 
     <dependencyManagement>
@@ -47,6 +50,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -9,6 +9,7 @@ import dk.kavv.uuideck.pipeline.Components;
 import dk.kavv.uuideck.pipeline.ComponentsFactory;
 import dk.kavv.uuideck.pipeline.IncompatibleComponentsException;
 import dk.kavv.uuideck.random.StringSeedGenerator;
+import dk.kavv.uuideck.version.PropertyVersionProvider;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
@@ -22,7 +23,7 @@ import java.util.concurrent.Callable;
 import static picocli.CommandLine.ExitCode;
 import static picocli.CommandLine.Option;
 
-@Command(name = "uuideck", mixinStandardHelpOptions = true)
+@Command(name = "uuideck", mixinStandardHelpOptions = true, versionProvider = PropertyVersionProvider.class)
 public class App implements Callable<Integer> {
     @Spec
     private CommandSpec spec;
@@ -35,7 +36,7 @@ public class App implements Callable<Integer> {
 
     // Component options
     // Default values could be here in simple cases, but the logic will get much more complicated, so it's in the ComponentsFactory.
-    @Option(names = {"-e", "--encoder"}, description = "Options: ${COMPLETION-CANDIDATES}\nDefault: base64")
+    @Option(names = {"-e", "--encoder"}, description = "Options: ${COMPLETION-CANDIDATES}%nDefault: base64")
     private EncoderType encoderType;
     @Option(names = {"-c", "--compression"}, negatable = true, description = "Default: true")
     private Optional<Boolean> doCompression;
