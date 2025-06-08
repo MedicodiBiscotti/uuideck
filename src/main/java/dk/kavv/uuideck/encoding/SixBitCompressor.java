@@ -2,13 +2,14 @@ package dk.kavv.uuideck.encoding;
 
 import java.util.BitSet;
 
-public class SixBitCompressor {
+public class SixBitCompressor implements Compressor {
     /*
     BitSet both produces and reads as little-endian. As long as a BitSet or other LE parsing is used, this is fine.
     Can also be implemented with two BitSets of different lengths and indices, or String manipulation.
      */
+    @Override
     public byte[] compress(byte[] deck) {
-        BitSet bits = new BitSet(312);
+        BitSet bits = new BitSet(312); // Init size 52 * 6
         int start = 0;
         for (int card : deck) {
             for (int i = 0; i < 6; i++) {
@@ -21,6 +22,7 @@ public class SixBitCompressor {
         return bits.toByteArray();
     }
 
+    @Override
     public byte[] decompress(byte[] compressed) {
         BitSet bits = BitSet.valueOf(compressed);
         byte[] deck = new byte[compressed.length * 4 / 3];

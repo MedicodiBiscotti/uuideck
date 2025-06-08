@@ -17,7 +17,7 @@ public class ComponentsFactory {
 
     public static Components getComponents(Optional<Boolean> doCompression, EncoderType encoderType) {
         Encoder encoder = getEncoder(encoderType);
-        Optional<SixBitCompressor> compressor = getCompressor(doCompression, encoder);
+        Compressor compressor = getCompressor(doCompression, encoder);
         if (!errors.isEmpty()) {
             throw new IncompatibleComponentsException(errors);
         }
@@ -30,24 +30,25 @@ public class ComponentsFactory {
     Compressor only has 1 option, so it's a boolean choice that can be inferred from the other choices.
      */
 
-    public static Optional<SixBitCompressor> getCompressor(Optional<Boolean> doCompression, Encoder encoder) {
+    public static Compressor getCompressor(Optional<Boolean> doCompression, Encoder encoder) {
         if (doCompression.isEmpty()) {
             if (encoder instanceof EightBitBase64Encoder) {
-                return Optional.of(new SixBitCompressor());
+                return new SixBitCompressor();
             } else {
-                return Optional.empty();
+                return new Compressor() {
+                };
             }
         }
         boolean b = doCompression.get();
         if (b) {
             if (encoder instanceof AsciiEncoder) {
                 errors.add("6-bit compression incompatible with ASCII encoding");
-                return Optional.empty();
-            } else {
-                return Optional.of(new SixBitCompressor());
+                // Still return requested component, so the choice can be validated against other requested components.
             }
+            return new SixBitCompressor();
         }
-        return Optional.empty();
+        return new Compressor() {
+        };
     }
 
     public static Encoder getEncoder(EncoderType encoderType) {
