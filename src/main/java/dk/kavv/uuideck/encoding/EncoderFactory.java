@@ -13,12 +13,13 @@ public class EncoderFactory {
     private static final List<String> errors = new ArrayList<>();
 
     public static Encoder getEncoder(Optional<Boolean> doCompression, EncoderType encoderType) {
+        errors.clear();
         Encoder encoder = (encoderType != null) ? switch (encoderType) {
             case base64 -> getBase64(doCompression);
             case ascii -> getAscii(doCompression);
         } : getBase64(doCompression);
         if (!errors.isEmpty()) {
-            throw new IncompatibleComponentsException(errors);
+            throw new IncompatibleComponentsException(List.copyOf(errors));
         }
         return encoder;
     }

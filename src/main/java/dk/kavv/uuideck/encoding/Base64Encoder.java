@@ -1,9 +1,11 @@
 package dk.kavv.uuideck.encoding;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Base64;
 
+@Getter
 @RequiredArgsConstructor
 public class Base64Encoder implements Encoder {
     // Compression is only compatible with base64 encoding.
