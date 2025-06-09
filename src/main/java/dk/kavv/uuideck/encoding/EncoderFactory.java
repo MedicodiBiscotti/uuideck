@@ -17,11 +17,22 @@ public class EncoderFactory {
         Encoder encoder = (encoderType != null) ? switch (encoderType) {
             case base64 -> getBase64(doCompression);
             case ascii -> getAscii(doCompression);
-        } : getBase64(doCompression);
+            case all -> getMulti(doCompression);
+        } : getMulti(doCompression);
         if (!errors.isEmpty()) {
             throw new IncompatibleComponentsException(List.copyOf(errors));
         }
         return encoder;
+    }
+
+    public static MultiEncoder getMulti(Optional<Boolean> doCompression) {
+        // For now, ignore boolean.
+        return new MultiEncoder(List.of(
+                new Base64Encoder(new Compressor() {
+                }),
+                new Base64Encoder(new SixBitCompressor()),
+                new AsciiEncoder()
+        ));
     }
 
     /*

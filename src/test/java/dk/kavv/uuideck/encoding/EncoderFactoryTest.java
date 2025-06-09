@@ -1,5 +1,6 @@
 package dk.kavv.uuideck.encoding;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -7,11 +8,19 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EncoderFactoryTest {
+    @Disabled
     @Test
     void givenNullInputsThenReturnBase64Compressed() {
         Encoder encoder = EncoderFactory.getEncoder(Optional.empty(), null);
         assertInstanceOf(Base64Encoder.class, encoder);
         assertInstanceOf(SixBitCompressor.class, ((Base64Encoder) encoder).getCompressor());
+    }
+
+    @Test
+    void givenNullInputsThenReturnMulti() {
+        Encoder encoder = EncoderFactory.getEncoder(Optional.empty(), null);
+        assertInstanceOf(MultiEncoder.class, encoder);
+        assertEquals(3, ((MultiEncoder) encoder).getEncoders().size());
     }
 
     @Test
