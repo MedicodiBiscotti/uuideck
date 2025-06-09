@@ -23,9 +23,9 @@ class MultiEncoderTest {
 
         // Assert
         String[] expected = {
-                "Base64 (uncompressed): LxgZJA8rMwkXBSISMAofHicpKhQlLgEMBw0mKBMOBgggAwAEGxEyIRAxGi0VIxYLAh0cLA==",
-                "Base64 (compressed): L5aRzzonVyFKsPJ5Z6pSpRswR2Oik2Mg4AAQWySHUKy11WgtQsex",
-                "ASCII: W@AL7S[1?-J:X2GFOQR<MV)4/5NP;6.0H+(,C9ZI8YBU=K>3*EDT"
+                "Base64 (uncompressed):\tLxgZJA8rMwkXBSISMAofHicpKhQlLgEMBw0mKBMOBgggAwAEGxEyIRAxGi0VIxYLAh0cLA==",
+                "Base64 (compressed):\tL5aRzzonVyFKsPJ5Z6pSpRswR2Oik2Mg4AAQWySHUKy11WgtQsex",
+                "ASCII:\t\t\tW@AL7S[1?-J:X2GFOQR<MV)4/5NP;6.0H+(,C9ZI8YBU=K>3*EDT"
         };
         String[] actual = encoded.split(System.lineSeparator());
         assertArrayEquals(expected, actual);

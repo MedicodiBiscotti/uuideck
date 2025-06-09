@@ -34,7 +34,7 @@ public class App implements Callable<Integer> {
 
     // Component options
     // Default values could be here in simple cases, but the logic will get much more complicated, so it's in the ComponentsFactory.
-    @Option(names = {"-e", "--encoder"}, description = "Options: ${COMPLETION-CANDIDATES}%nDefault: base64")
+    @Option(names = {"-e", "--encoder"}, description = "Options: ${COMPLETION-CANDIDATES}%nDefault: all")
     private EncoderType encoderType;
     @Option(names = {"-c", "--compression"}, negatable = true, description = "Default: true")
     private Optional<Boolean> doCompression;

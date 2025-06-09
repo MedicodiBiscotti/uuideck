@@ -19,12 +19,12 @@ public class MultiEncoder implements Encoder {
             if (encoder instanceof Base64Encoder) {
                 sb.append("Base64 ");
                 if (((Base64Encoder) encoder).getCompressor() instanceof SixBitCompressor) {
-                    sb.append("(compressed): ");
+                    sb.append("(compressed):\t");
                 } else {
-                    sb.append("(uncompressed): ");
+                    sb.append("(uncompressed):\t");
                 }
             } else if (encoder instanceof AsciiEncoder) {
-                sb.append("ASCII: ");
+                sb.append("ASCII:\t\t\t");
             }
             sb.append(encoder.encode(bytes));
             sj.add(sb);
