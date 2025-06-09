@@ -1,4 +1,4 @@
-package dk.kavv.uuideck.pipeline;
+package dk.kavv.uuideck.encoding;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

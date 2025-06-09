@@ -2,12 +2,10 @@ package dk.kavv.uuideck;
 
 import dk.kavv.uuideck.decks.DeckGenerator;
 import dk.kavv.uuideck.decks.RunningIntegerDeck;
-import dk.kavv.uuideck.encoding.Compressor;
 import dk.kavv.uuideck.encoding.Encoder;
+import dk.kavv.uuideck.encoding.EncoderFactory;
 import dk.kavv.uuideck.encoding.EncoderType;
-import dk.kavv.uuideck.pipeline.Components;
-import dk.kavv.uuideck.pipeline.ComponentsFactory;
-import dk.kavv.uuideck.pipeline.IncompatibleComponentsException;
+import dk.kavv.uuideck.encoding.IncompatibleComponentsException;
 import dk.kavv.uuideck.random.StringSeedGenerator;
 import dk.kavv.uuideck.version.PropertyVersionProvider;
 import picocli.CommandLine;
@@ -42,7 +40,6 @@ public class App implements Callable<Integer> {
     private Optional<Boolean> doCompression;
 
     private DeckGenerator deckGenerator = new RunningIntegerDeck();
-    private Compressor compressor;
     private Encoder encoder;
 
     public static void main(String[] args) {
@@ -53,9 +50,7 @@ public class App implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         try {
-            Components components = ComponentsFactory.getComponents(doCompression, encoderType);
-            encoder = components.getEncoder();
-            compressor = components.getCompressor();
+            encoder = EncoderFactory.getEncoder(doCompression, encoderType);
         } catch (IncompatibleComponentsException e) {
             throw new ParameterException(spec.commandLine(), String.join("\n", e.getErrors()));
         }
@@ -69,7 +64,6 @@ public class App implements Callable<Integer> {
 
     public void decodeDeck(String in) {
         byte[] deck = encoder.decode(in);
-        deck = compressor.decompress(deck);
         deckGenerator.present(deck);
     }
 
@@ -86,7 +80,6 @@ public class App implements Callable<Integer> {
 
         byte[] deck = deckGenerator.generate(r);
         deckGenerator.present(deck);
-        deck = compressor.compress(deck);
         String encoded = encoder.encode(deck);
         System.out.println(encoded);
     }

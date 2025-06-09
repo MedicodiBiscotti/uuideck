@@ -1,0 +1,23 @@
+package dk.kavv.uuideck.encoding;
+
+import lombok.RequiredArgsConstructor;
+
+import java.util.Base64;
+
+@RequiredArgsConstructor
+public class Base64Encoder implements Encoder {
+    // Compression is only compatible with base64 encoding.
+    // We need to optionally compress with multiple encodings,
+    // so compression step is moved here.
+    private final Compressor compressor;
+
+    public String encode(byte[] bytes) {
+        bytes = compressor.compress(bytes);
+        return Base64.getUrlEncoder().encodeToString(bytes);
+    }
+
+    public byte[] decode(String s) {
+        byte[] bytes = Base64.getUrlDecoder().decode(s);
+        return compressor.decompress(bytes);
+    }
+}

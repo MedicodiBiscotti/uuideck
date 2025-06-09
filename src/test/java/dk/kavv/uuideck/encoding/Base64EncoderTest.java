@@ -5,8 +5,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class EightBitBase64EncoderTest {
-    private final EightBitBase64Encoder encoder = new EightBitBase64Encoder();
+class Base64EncoderTest {
+    private final Base64Encoder encoder = new Base64Encoder(new Compressor() {
+    });
 
     @Test
     void encode() {
