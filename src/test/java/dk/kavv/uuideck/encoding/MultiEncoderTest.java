@@ -1,5 +1,7 @@
 package dk.kavv.uuideck.encoding;
 
+import dk.kavv.uuideck.compression.NoOpCompressor;
+import dk.kavv.uuideck.compression.SixBitCompressor;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,8 +13,7 @@ class MultiEncoderTest {
     void givenMultipleEncodersReturnMultipleLines() {
         // Arrange
         Encoder encoder = new MultiEncoder(List.of(
-                new Base64Encoder(new Compressor() {
-                }),
+                new Base64Encoder(new NoOpCompressor()),
                 new Base64Encoder(new SixBitCompressor()),
                 new AsciiEncoder()
         ));

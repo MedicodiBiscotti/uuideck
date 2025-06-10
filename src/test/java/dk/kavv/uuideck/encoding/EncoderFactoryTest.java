@@ -1,5 +1,7 @@
 package dk.kavv.uuideck.encoding;
 
+import dk.kavv.uuideck.compression.NoOpCompressor;
+import dk.kavv.uuideck.compression.SixBitCompressor;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -55,6 +57,6 @@ class EncoderFactoryTest {
     void givenBase64AndNoCompressionThenReturnBase64WithoutCompression() {
         Encoder encoder = EncoderFactory.getEncoder(Optional.of(false), EncoderType.base64);
         assertInstanceOf(Base64Encoder.class, encoder);
-        assertFalse(((Base64Encoder) encoder).getCompressor() instanceof SixBitCompressor);
+        assertInstanceOf(NoOpCompressor.class, ((Base64Encoder) encoder).getCompressor());
     }
 }

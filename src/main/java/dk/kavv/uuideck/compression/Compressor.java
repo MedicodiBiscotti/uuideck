@@ -1,4 +1,4 @@
-package dk.kavv.uuideck.encoding;
+package dk.kavv.uuideck.compression;
 
 /**
  * Compresses data. Default implementation is no-op.

@@ -1,13 +1,13 @@
 package dk.kavv.uuideck.encoding;
 
+import dk.kavv.uuideck.compression.NoOpCompressor;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Base64EncoderTest {
-    private final Base64Encoder encoder = new Base64Encoder(new Compressor() {
-    });
+    private final Base64Encoder encoder = new Base64Encoder(new NoOpCompressor());
 
     @Test
     void encode() {

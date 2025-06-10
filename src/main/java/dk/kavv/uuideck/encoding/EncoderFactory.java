@@ -1,5 +1,9 @@
 package dk.kavv.uuideck.encoding;
 
+import dk.kavv.uuideck.compression.Compressor;
+import dk.kavv.uuideck.compression.NoOpCompressor;
+import dk.kavv.uuideck.compression.SixBitCompressor;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,8 +32,7 @@ public class EncoderFactory {
     public static MultiEncoder getMulti(Optional<Boolean> doCompression) {
         // For now, ignore boolean.
         return new MultiEncoder(List.of(
-                new Base64Encoder(new Compressor() {
-                }),
+                new Base64Encoder(new NoOpCompressor()),
                 new Base64Encoder(new SixBitCompressor()),
                 new AsciiEncoder()
         ));
@@ -44,8 +47,7 @@ public class EncoderFactory {
      */
 
     public static Base64Encoder getBase64(Optional<Boolean> doCompression) {
-        Compressor compressor = (doCompression.isEmpty() || doCompression.get()) ? new SixBitCompressor() : new Compressor() {
-        };
+        Compressor compressor = (doCompression.isEmpty() || doCompression.get()) ? new SixBitCompressor() : new NoOpCompressor();
         return new Base64Encoder(compressor);
     }
 

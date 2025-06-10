@@ -1,5 +1,6 @@
 package dk.kavv.uuideck.encoding;
 
+import dk.kavv.uuideck.compression.Compressor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
