@@ -20,7 +20,11 @@ public class Base64Encoder implements Encoder {
     }
 
     public byte[] decode(String s) {
-        byte[] bytes = Base64.getUrlDecoder().decode(s);
-        return compressor.decompress(bytes);
+        try {
+            byte[] bytes = Base64.getUrlDecoder().decode(s);
+            return compressor.decompress(bytes);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidDataException("Not valid Base64", e);
+        }
     }
 }

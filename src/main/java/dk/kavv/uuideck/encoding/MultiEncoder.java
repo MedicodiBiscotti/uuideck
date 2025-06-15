@@ -36,6 +36,6 @@ public class MultiEncoder implements Encoder {
 
     @Override
     public byte[] decode(String s) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Multi-encoder does not support decoding. Please specify which encoder to use.");
     }
 }

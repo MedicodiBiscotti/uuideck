@@ -6,6 +6,7 @@ import dk.kavv.uuideck.encoding.Encoder;
 import dk.kavv.uuideck.encoding.EncoderFactory;
 import dk.kavv.uuideck.encoding.EncoderType;
 import dk.kavv.uuideck.encoding.IncompatibleComponentsException;
+import dk.kavv.uuideck.errorhandling.ShortBusinessExceptionHandler;
 import dk.kavv.uuideck.random.StringSeedGenerator;
 import dk.kavv.uuideck.version.PropertyVersionProvider;
 import picocli.CommandLine;
@@ -43,7 +44,9 @@ public class App implements Callable<Integer> {
     private Encoder encoder;
 
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new App()).execute(args);
+        int exitCode = new CommandLine(new App())
+                .setExecutionExceptionHandler(new ShortBusinessExceptionHandler())
+                .execute(args);
         System.exit(exitCode);
     }
 
@@ -52,10 +55,14 @@ public class App implements Callable<Integer> {
         try {
             encoder = EncoderFactory.getEncoder(doCompression, encoderType);
         } catch (IncompatibleComponentsException e) {
-            throw new ParameterException(spec.commandLine(), String.join("\n", e.getErrors()));
+            throw new ParameterException(spec.commandLine(), String.join(System.lineSeparator(), e.getErrors()));
         }
         if (encoded != null) {
-            decodeDeck(encoded);
+            try {
+                decodeDeck(encoded);
+            } catch (UnsupportedOperationException e) {
+                throw new ParameterException(spec.commandLine(), e.getMessage());
+            }
         } else {
             generateDeck();
         }

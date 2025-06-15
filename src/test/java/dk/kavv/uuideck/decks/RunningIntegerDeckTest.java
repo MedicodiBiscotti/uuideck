@@ -42,7 +42,7 @@ class RunningIntegerDeckTest {
 
     @Test
     void tooHighValueThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(InvalidDeckException.class, () -> {
             deckGenerator.toCard((byte) 52);
         });
     }
