@@ -9,6 +9,7 @@ import dk.kavv.uuideck.encoding.IncompatibleComponentsException;
 import dk.kavv.uuideck.errorhandling.ShortBusinessExceptionHandler;
 import dk.kavv.uuideck.random.StringSeedGenerator;
 import dk.kavv.uuideck.version.PropertyVersionProvider;
+import lombok.Getter;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
@@ -35,10 +36,19 @@ public class App implements Callable<Integer> {
 
     // Component options
     // Default values could be here in simple cases, but the logic will get much more complicated, so it's in the ComponentsFactory.
-    @Option(names = {"-e", "--encoder"}, description = "Options: ${COMPLETION-CANDIDATES}%nDefault: all")
+    // Newlines can also be done with %n instead of arrays.
+    @Option(names = {"-e", "--encoder"}, description = {
+            "Options: ${COMPLETION-CANDIDATES}",
+            "Default: all"})
     private EncoderType encoderType;
     @Option(names = {"-c", "--compression"}, negatable = true, description = "Default: true")
     private Optional<Boolean> doCompression;
+
+    @Getter
+    @Option(names = {"-v", "--verbose"}, description = {
+            "Specify multiple -v options to increase verbosity.",
+            "For example, `-v -v -v` or `-vvv`"})
+    private boolean[] verbosity = new boolean[0];
 
     private DeckGenerator deckGenerator = new RunningIntegerDeck();
     private Encoder encoder;
