@@ -3,6 +3,9 @@ package dk.kavv.uuideck.utils;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -10,7 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class FactoradicUtilsTest {
     @Test
     void factorialNegativeThrowsError() {
-        assertThrows(NegativeInputException.class, () -> FactoradicUtils.factorial(-1));
+        NegativeInputException e = assertThrows(NegativeInputException.class, () -> FactoradicUtils.factorial(-1));
+        assertEquals("Value -1 cannot be negative", e.getMessage());
     }
 
     @Test
@@ -37,5 +41,42 @@ class FactoradicUtilsTest {
     @Test
     void factorialFiftyTwoReturnsLarge() {
         assertEquals(new BigInteger("80658175170943878571660636856403766975289505440883277824000000000000"), FactoradicUtils.factorial(52));
+    }
+
+    @Test
+    void factoradic012Returns5() {
+        byte[] factoradic = {0, 1, 2};
+        assertEquals(BigInteger.valueOf(5), FactoradicUtils.factoradicToDecimal(factoradic));
+    }
+
+    @Test
+    void factoradicMaxDeckReturnsFactorialMinusOne() {
+        List<Integer> deck = new ArrayList<>(IntStream.range(0, 52).boxed().toList());
+        byte[] factoradic = new byte[deck.size()];
+        for (int i = 0; i < deck.size(); i++) {
+            factoradic[i] = deck.get(i).byteValue();
+        }
+        assertEquals(new BigInteger("80658175170943878571660636856403766975289505440883277823999999999999"), FactoradicUtils.factoradicToDecimal(factoradic));
+    }
+
+    @Test
+    void invalidFactoradicEqualsThrowsError() {
+        byte[] factoradic = {0, 2, 2};
+        ValueExceedsRadixException e = assertThrows(ValueExceedsRadixException.class, () -> FactoradicUtils.factoradicToDecimal(factoradic));
+        assertEquals("Value 2 cannot equal or exceed radix/base 2", e.getMessage());
+    }
+
+    @Test
+    void invalidFactoradicExceedsThrowsError() {
+        byte[] factoradic = {0, 3, 2};
+        ValueExceedsRadixException e = assertThrows(ValueExceedsRadixException.class, () -> FactoradicUtils.factoradicToDecimal(factoradic));
+        assertEquals("Value 3 cannot equal or exceed radix/base 2", e.getMessage());
+    }
+
+    @Test
+    void invalidFactoradicNegativeThrowsError() {
+        byte[] factoradic = {0, -1, 2};
+        NegativeInputException e = assertThrows(NegativeInputException.class, () -> FactoradicUtils.factoradicToDecimal(factoradic));
+        assertEquals("Value -1 cannot be negative", e.getMessage());
     }
 }
