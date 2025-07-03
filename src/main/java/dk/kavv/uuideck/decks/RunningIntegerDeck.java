@@ -37,12 +37,11 @@ public class RunningIntegerDeck implements DeckGenerator {
         }
     }
 
-    public void present(byte[] bytes) {
+    public String present(byte[] bytes) {
         // Alternatively, StringJoiner and for loop.
-        System.out.println(
-                IntStream.range(0, bytes.length)
-                        .mapToObj(i -> toCard(bytes[i]))
-                        .collect(Collectors.joining(", ")));
+        return IntStream.range(0, bytes.length)
+                .mapToObj(i -> toCard(bytes[i]))
+                .collect(Collectors.joining(", "));
     }
 
     public String toCard(byte b) {

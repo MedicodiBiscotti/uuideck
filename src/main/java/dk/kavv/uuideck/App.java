@@ -81,7 +81,7 @@ public class App implements Callable<Integer> {
 
     public void decodeDeck(String in) {
         byte[] deck = encoder.decode(in);
-        deckGenerator.present(deck);
+        System.out.println(deckGenerator.present(deck));
     }
 
     public void generateDeck() {
@@ -96,7 +96,7 @@ public class App implements Callable<Integer> {
         }
 
         byte[] deck = deckGenerator.generate(r);
-        deckGenerator.present(deck);
+        System.out.println(deckGenerator.present(deck));
         String encoded = encoder.encode(deck);
         System.out.println(encoded);
     }

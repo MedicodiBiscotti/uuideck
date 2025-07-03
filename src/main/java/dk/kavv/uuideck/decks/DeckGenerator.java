@@ -5,7 +5,7 @@ import java.util.Random;
 public interface DeckGenerator {
     byte[] generate(Random r);
 
-    void present(byte[] bytes);
+    String present(byte[] bytes);
 
     String toCard(byte b);
 }
