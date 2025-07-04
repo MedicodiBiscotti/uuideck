@@ -17,13 +17,18 @@ Ever wanted to generate a UUID that doubles as a deck of cards?
 - [x] Seed random generation
     - [x] Number (64-bit)
     - [x] String (first 8 bytes)
+- [x] Multiple encoders at once
+- [ ] Verbosity for detailed output
+    - [x] Print stack-trace for errors
+    - [ ] General logging
 - [ ] Raw encoding showing underlying raw data
-- [ ] "Suit-signed" 6-bit deck generation (first 2 bits denote the suit)
-- [ ] [Factoradic](https://en.wikipedia.org/wiki/Factorial_number_system) deck generation
-    - [ ] Permutation index first
-    - [ ] Factoradic first
+- [ ] [Factoradic](https://en.wikipedia.org/wiki/Factorial_number_system) encoding
+    - [ ] Permutation index
+    - [ ] Lehmer code
 - [ ] JSON format
 - [ ] File output
+- [ ] Different deck specifications, e.g different size, suits, ranks
+- [ ] ~~"Suit-signed" 6-bit deck generation (first 2 bits denote the suit)~~
 
 ## Install
 
