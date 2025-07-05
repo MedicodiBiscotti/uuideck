@@ -41,7 +41,26 @@ public class FactoradicUtils {
         return res;
     }
 
-    public static byte[] decimalToFactoradic(BigInteger decimal) {
-        return null;
+    public static byte[] decimalToFactoradic(BigInteger decimal, int length) {
+        byte[] res = new byte[length];
+        BigInteger quotient = decimal;
+        // Could also loop while decimal > 0 and add to a growing List. No need for length, then.
+        for (int i = res.length - 1; i >= 0; i--) {
+            // Short circuit if decimal is 0. All future quotients and remainders are also 0.
+            if (quotient.equals(BigInteger.ZERO)) {
+                break;
+            }
+            BigInteger radix = BigInteger.valueOf(res.length - i);
+            BigInteger[] quotientAndRemainder = quotient.divideAndRemainder(radix);
+            quotient = quotientAndRemainder[0]; // Reassign the new quotient
+            BigInteger remainder = quotientAndRemainder[1];
+            res[i] = remainder.byteValue();
+        }
+        // Could also check at beginning if decimal >= factorial(length). Would catch earlier, but do more compute.
+        // If you don't need to hold on to original decimal value for this error message, we can reassign quotient to decimal in the loop.
+        if (!quotient.equals(BigInteger.ZERO)) {
+            throw new ValueExceedsLengthException(decimal, length);
+        }
+        return res;
     }
 }

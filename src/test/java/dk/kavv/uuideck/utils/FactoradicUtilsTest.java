@@ -6,8 +6,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FactoradicUtilsTest {
     @Test
@@ -43,7 +42,7 @@ class FactoradicUtilsTest {
     }
 
     @Test
-    void factoradic012Returns5() {
+    void factoradic210Returns5() {
         byte[] factoradic = {2, 1, 0};
         assertEquals(BigInteger.valueOf(5), FactoradicUtils.factoradicToDecimal(factoradic));
     }
@@ -83,5 +82,37 @@ class FactoradicUtilsTest {
         byte[] factoradic = {2, -1, 0};
         NegativeInputException e = assertThrows(NegativeInputException.class, () -> FactoradicUtils.factoradicToDecimal(factoradic));
         assertEquals("Value -1 cannot be negative", e.getMessage());
+    }
+
+    @Test
+    void decimal5returns210() {
+        BigInteger decimal = BigInteger.valueOf(5);
+        byte[] expected = {2, 1, 0};
+        assertArrayEquals(expected, FactoradicUtils.decimalToFactoradic(decimal, 3));
+    }
+
+    @Test
+    void decimal0returns000() {
+        BigInteger decimal = BigInteger.valueOf(0);
+        byte[] expected = {0, 0, 0};
+        assertArrayEquals(expected, FactoradicUtils.decimalToFactoradic(decimal, 3));
+    }
+
+    @Test
+    void decimalFactorialMinusOneReturnsMaxFactoradic() {
+        BigInteger decimal = new BigInteger("80658175170943878571660636856403766975289505440883277823999999999999");
+        List<Integer> ints = IntStream.iterate(51, value -> value >= 0, operand -> operand - 1).boxed().toList();
+        byte[] expected = new byte[ints.size()];
+        for (int i = 0; i < ints.size(); i++) {
+            expected[i] = ints.get(i).byteValue();
+        }
+        assertArrayEquals(expected, FactoradicUtils.decimalToFactoradic(decimal, 52));
+    }
+
+    @Test
+    void decimal6WithLength3throwsError() {
+        BigInteger decimal = BigInteger.valueOf(6);
+        ValueExceedsLengthException e = assertThrows(ValueExceedsLengthException.class, () -> FactoradicUtils.decimalToFactoradic(decimal, 3));
+        assertEquals("Value 6 cannot fit in array of length 3", e.getMessage());
     }
 }
