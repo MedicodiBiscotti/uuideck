@@ -63,4 +63,56 @@ public class FactoradicUtils {
         }
         return res;
     }
+
+    /**
+     * Constructs Lehmer code for a given permutation by looping through it and decrementing all remaining values if they are greater than the current value.
+     * Another way to think of it is shifting their index as a response to a lower value being removed from the pool of future choices.
+     *
+     * @param perm Permutation to encode
+     * @return Lehmer code
+     */
+    public static byte[] encodeLehmer(byte[] perm) {
+        byte[] lehmer = perm.clone();
+        for (int i = 0; i < lehmer.length - 1; i++) {
+            for (int j = i + 1; j < lehmer.length; j++) {
+                if (lehmer[j] > lehmer[i]) {
+                    lehmer[j]--;
+                }
+            }
+        }
+        return lehmer;
+    }
+
+    public static byte[] decodeLehmer(byte[] lehmer) {
+        // Don't really need to preserve original data when decoding, but might as well.
+        byte[] perm = lehmer.clone();
+        for (int i = perm.length - 2; i >= 0; i--) {
+            for (int j = i + 1; j < perm.length; j++) {
+                if (perm[j] >= perm[i]) {
+                    perm[j]++;
+                }
+            }
+        }
+        return perm;
+    }
+
+    /*
+ Can also be done like this:
+ Finds the right position for the value/index i based on lehmer[i] (how many elements are smaller later in perm).
+ Moves other elements left to make room,  then inserts there.
+    public int[] decodeLehmer(int[] lehmer) {
+        int n = lehmer.length;
+        int[] perm = new int[n];
+        for (int i = n - 1; i >= 0; i--) {
+            int pos = i + lehmer[i];
+            // Shift elements right
+            for (int j = i; j < pos; j++) {
+                perm[j] = perm[j + 1];
+            }
+            perm[pos] = i;
+        }
+        return perm;
+    }
+*/
+
 }

@@ -20,7 +20,6 @@ class FactoradicUtilsTest {
         assertEquals(BigInteger.ONE, FactoradicUtils.factorial(0));
     }
 
-
     @Test
     void factorialOneReturnsOne() {
         assertEquals(BigInteger.ONE, FactoradicUtils.factorial(1));
@@ -114,5 +113,47 @@ class FactoradicUtilsTest {
         BigInteger decimal = BigInteger.valueOf(6);
         ValueExceedsLengthException e = assertThrows(ValueExceedsLengthException.class, () -> FactoradicUtils.decimalToFactoradic(decimal, 3));
         assertEquals("Value 6 cannot fit in array of length 3", e.getMessage());
+    }
+
+    @Test
+    void permutation0123Returns0000() {
+        byte[] perm = {0, 1, 2, 3};
+        byte[] expected = {0, 0, 0, 0};
+        assertArrayEquals(expected, FactoradicUtils.encodeLehmer(perm));
+    }
+
+    @Test
+    void permutation3210Returns3210() {
+        byte[] perm = {3, 2, 1, 0};
+        byte[] expected = {3, 2, 1, 0};
+        assertArrayEquals(expected, FactoradicUtils.encodeLehmer(perm));
+    }
+
+    @Test
+    void permutation0231Returns0110() {
+        byte[] perm = {0, 2, 3, 1};
+        byte[] expected = {0, 1, 1, 0};
+        assertArrayEquals(expected, FactoradicUtils.encodeLehmer(perm));
+    }
+
+    @Test
+    void lehmer0000Returns0123() {
+        byte[] lehmer = {0, 0, 0, 0};
+        byte[] expected = {0, 1, 2, 3};
+        assertArrayEquals(expected, FactoradicUtils.decodeLehmer(lehmer));
+    }
+
+    @Test
+    void lehmer3210Returns3210() {
+        byte[] lehmer = {3, 2, 1, 0};
+        byte[] expected = {3, 2, 1, 0};
+        assertArrayEquals(expected, FactoradicUtils.decodeLehmer(lehmer));
+    }
+
+    @Test
+    void lehmer0110Returns0231() {
+        byte[] lehmer = {0, 1, 1, 0};
+        byte[] expected = {0, 2, 3, 1};
+        assertArrayEquals(expected, FactoradicUtils.decodeLehmer(lehmer));
     }
 }
