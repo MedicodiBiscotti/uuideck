@@ -22,7 +22,7 @@ class EncoderFactoryTest {
     void givenNullInputsThenReturnMulti() {
         Encoder encoder = EncoderFactory.getEncoder(Optional.empty(), null);
         assertInstanceOf(MultiEncoder.class, encoder);
-        assertEquals(3, ((MultiEncoder) encoder).getEncoders().size());
+        assertEquals(4, ((MultiEncoder) encoder).getEncoders().size());
     }
 
     @Test

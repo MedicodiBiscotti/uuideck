@@ -26,6 +26,8 @@ public class MultiEncoder implements Encoder {
                 }
             } else if (encoder instanceof AsciiEncoder) {
                 sb.append("ASCII:\t\t\t");
+            } else if (encoder instanceof DecimalEncoder) {
+                sb.append("Decimal:\t\t");
             }
             sb.append(encoder.encode(bytes));
             sj.add(sb);

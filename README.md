@@ -23,8 +23,8 @@ Ever wanted to generate a UUID that doubles as a deck of cards?
     - [ ] General logging
 - [ ] Raw encoding showing underlying raw data
 - [ ] [Factoradic](https://en.wikipedia.org/wiki/Factorial_number_system) encoding
-    - [ ] Permutation index
-    - [ ] Lehmer code
+    - [x] Permutation index
+    - [ ] [Lehmer code](https://en.wikipedia.org/wiki/Lehmer_code)
 - [ ] JSON format
 - [ ] File output
 - [ ] Different deck specifications, e.g different size, suits, ranks
@@ -33,6 +33,13 @@ Ever wanted to generate a UUID that doubles as a deck of cards?
 ## Install
 
 Sorry for cluttering the user folder, but it's the simplest way to just "put it somewhere".
+
+```shell
+mvn clean install
+```
+
+Or grab the artifacts from the [GitHub releases](https://github.com/MedicodiBiscotti/uuideck/releases/latest)
+and follow the instructions of the install script manually to put them in the right place.
 
 The installation happens as part of the Maven build process. It goes like this:
 

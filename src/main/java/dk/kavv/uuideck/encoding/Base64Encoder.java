@@ -14,11 +14,13 @@ public class Base64Encoder implements Encoder {
     // so compression step is moved here.
     private final Compressor compressor;
 
+    @Override
     public String encode(byte[] bytes) {
         bytes = compressor.compress(bytes);
         return Base64.getUrlEncoder().encodeToString(bytes);
     }
 
+    @Override
     public byte[] decode(String s) {
         try {
             byte[] bytes = Base64.getUrlDecoder().decode(s);

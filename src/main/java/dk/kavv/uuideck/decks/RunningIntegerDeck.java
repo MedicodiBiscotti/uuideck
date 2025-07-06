@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class RunningIntegerDeck implements DeckGenerator {
+    @Override
     public byte[] generate(Random r) {
         List<Integer> deck = new ArrayList<>(IntStream.range(0, 52).boxed().toList());
         byte[] bytes = new byte[deck.size()];
@@ -37,6 +38,7 @@ public class RunningIntegerDeck implements DeckGenerator {
         }
     }
 
+    @Override
     public String present(byte[] bytes) {
         // Alternatively, StringJoiner and for loop.
         return IntStream.range(0, bytes.length)
@@ -44,6 +46,7 @@ public class RunningIntegerDeck implements DeckGenerator {
                 .collect(Collectors.joining(", "));
     }
 
+    @Override
     public String toCard(byte b) {
         int suit = b / 13;
         int rank = b % 13;

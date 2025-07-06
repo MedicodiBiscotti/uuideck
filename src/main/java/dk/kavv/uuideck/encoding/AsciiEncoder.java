@@ -13,6 +13,8 @@ public class AsciiEncoder implements Encoder {
 
     @Override
     public String encode(byte[] bytes) {
+        // Clone to not mutate original array
+        bytes = bytes.clone();
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] += BASE_ASCII_VALUE;
         }

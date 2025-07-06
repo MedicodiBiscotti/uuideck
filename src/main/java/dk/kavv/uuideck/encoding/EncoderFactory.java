@@ -21,6 +21,7 @@ public class EncoderFactory {
         Encoder encoder = (encoderType != null) ? switch (encoderType) {
             case base64 -> getBase64(doCompression);
             case ascii -> getAscii(doCompression);
+            case decimal -> getDecimal(doCompression);
             case all -> getMulti(doCompression);
         } : getMulti(doCompression);
         if (!errors.isEmpty()) {
@@ -34,7 +35,8 @@ public class EncoderFactory {
         return new MultiEncoder(List.of(
                 new Base64Encoder(new NoOpCompressor()),
                 new Base64Encoder(new SixBitCompressor()),
-                new AsciiEncoder()
+                new AsciiEncoder(),
+                new DecimalEncoder()
         ));
     }
 
@@ -56,5 +58,12 @@ public class EncoderFactory {
             errors.add("6-bit compression incompatible with ASCII encoding");
         }
         return new AsciiEncoder();
+    }
+
+    public static DecimalEncoder getDecimal(Optional<Boolean> doCompression) {
+        if (doCompression.isPresent() && doCompression.get()) {
+            errors.add("6-bit compression incompatible with decimal encoding");
+        }
+        return new DecimalEncoder();
     }
 }
