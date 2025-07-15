@@ -12,14 +12,12 @@ public class DecimalEncoder extends AbstractFactoradicEncoder {
     public String encode(byte[] bytes) {
         byte[] lehmer = getFactoradic(bytes);
         BigInteger decimal = getDecimal(lehmer);
-        return decimal.toString();
-//        return base64Encoder.encode(decimal.toByteArray());
+        return base64Encoder.encode(decimal.toByteArray()) + " " + decimal;
     }
 
     @Override
     public byte[] decode(String s) {
-        BigInteger decimal = new BigInteger(s);
-//        BigInteger decimal = new BigInteger(base64Encoder.decode(s));
+        BigInteger decimal = new BigInteger(base64Encoder.decode(s));
         byte[] lehmer = getFactoradic(decimal);
         return FactoradicUtils.decodeLehmer(lehmer);
     }
