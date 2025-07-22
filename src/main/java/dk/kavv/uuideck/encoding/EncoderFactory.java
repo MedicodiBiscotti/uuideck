@@ -3,6 +3,7 @@ package dk.kavv.uuideck.encoding;
 import dk.kavv.uuideck.compression.Compressor;
 import dk.kavv.uuideck.compression.NoOpCompressor;
 import dk.kavv.uuideck.compression.SixBitCompressor;
+import dk.kavv.uuideck.decks.SetSpec;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,27 +17,28 @@ import java.util.Optional;
 public class EncoderFactory {
     private static final List<String> errors = new ArrayList<>();
 
-    public static Encoder getEncoder(Optional<Boolean> doCompression, EncoderType encoderType) {
+    // SetSpec is temporarily part of the encoding step until bigger refactor. Only needed for decimal decoding.
+    public static Encoder getEncoder(Optional<Boolean> doCompression, EncoderType encoderType, SetSpec spec) {
         errors.clear();
         Encoder encoder = (encoderType != null) ? switch (encoderType) {
             case base64 -> getBase64(doCompression);
             case ascii -> getAscii(doCompression);
-            case decimal -> getDecimal(doCompression);
-            case all -> getMulti(doCompression);
-        } : getMulti(doCompression);
+            case decimal -> getDecimal(doCompression, spec);
+            case all -> getMulti(doCompression, spec);
+        } : getMulti(doCompression, spec);
         if (!errors.isEmpty()) {
             throw new IncompatibleComponentsException(List.copyOf(errors));
         }
         return encoder;
     }
 
-    public static MultiEncoder getMulti(Optional<Boolean> doCompression) {
+    public static MultiEncoder getMulti(Optional<Boolean> doCompression, SetSpec spec) {
         // For now, ignore boolean.
         return new MultiEncoder(List.of(
                 new Base64Encoder(new NoOpCompressor()),
                 new Base64Encoder(new SixBitCompressor()),
                 new AsciiEncoder(),
-                new DecimalEncoder()
+                new DecimalEncoder(spec)
         ));
     }
 
@@ -60,10 +62,10 @@ public class EncoderFactory {
         return new AsciiEncoder();
     }
 
-    public static DecimalEncoder getDecimal(Optional<Boolean> doCompression) {
+    public static DecimalEncoder getDecimal(Optional<Boolean> doCompression, SetSpec spec) {
         if (doCompression.isPresent() && doCompression.get()) {
             errors.add("6-bit compression incompatible with decimal encoding");
         }
-        return new DecimalEncoder();
+        return new DecimalEncoder(spec);
     }
 }

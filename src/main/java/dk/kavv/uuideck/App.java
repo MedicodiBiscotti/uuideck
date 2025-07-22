@@ -1,7 +1,6 @@
 package dk.kavv.uuideck;
 
-import dk.kavv.uuideck.decks.DeckGenerator;
-import dk.kavv.uuideck.decks.RunningIntegerDeck;
+import dk.kavv.uuideck.decks.*;
 import dk.kavv.uuideck.encoding.Encoder;
 import dk.kavv.uuideck.encoding.EncoderFactory;
 import dk.kavv.uuideck.encoding.EncoderType;
@@ -43,6 +42,10 @@ public class App implements Callable<Integer> {
     private EncoderType encoderType;
     @Option(names = {"-c", "--compression"}, negatable = true, description = "Default: true")
     private Optional<Boolean> doCompression;
+    @Option(names = {"-T", "--set-type"}, description = {
+            "Options: ${COMPLETION-CANDIDATES}",
+            "Default: ${DEFAULT-VALUE}"})
+    private SetType setType = SetType.french;
 
     @Getter
     @Option(names = {"-v", "--verbose"}, description = {
@@ -52,6 +55,7 @@ public class App implements Callable<Integer> {
 
     private DeckGenerator deckGenerator = new RunningIntegerDeck();
     private Encoder encoder;
+    private SetSpec setSpec;
 
     public static void main(String[] args) {
         int exitCode = new CommandLine(new App())
@@ -63,7 +67,8 @@ public class App implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         try {
-            encoder = EncoderFactory.getEncoder(doCompression, encoderType);
+            setSpec = SetSpecFactory.getSpec(setType);
+            encoder = EncoderFactory.getEncoder(doCompression, encoderType, setSpec);
         } catch (IncompatibleComponentsException e) {
             throw new ParameterException(spec.commandLine(), String.join(System.lineSeparator(), e.getErrors()));
         }
@@ -81,7 +86,7 @@ public class App implements Callable<Integer> {
 
     public void decodeDeck(String in) {
         byte[] deck = encoder.decode(in);
-        System.out.println(deckGenerator.present(deck));
+        System.out.println(setSpec.present(deck));
     }
 
     public void generateDeck() {
@@ -95,8 +100,8 @@ public class App implements Callable<Integer> {
             r = new Random();
         }
 
-        byte[] deck = deckGenerator.generate(r);
-        System.out.println(deckGenerator.present(deck));
+        byte[] deck = deckGenerator.generate(setSpec, r);
+        System.out.println(setSpec.present(deck));
         String encoded = encoder.encode(deck);
         System.out.println(encoded);
     }

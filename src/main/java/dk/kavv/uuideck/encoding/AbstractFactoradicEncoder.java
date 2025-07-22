@@ -1,5 +1,6 @@
 package dk.kavv.uuideck.encoding;
 
+import dk.kavv.uuideck.decks.SetSpec;
 import dk.kavv.uuideck.utils.FactoradicUtils;
 
 import java.math.BigInteger;
@@ -18,9 +19,9 @@ public abstract class AbstractFactoradicEncoder implements Encoder {
         return factoradic;
     }
 
-    protected static byte[] getFactoradic(BigInteger decimal) {
+    protected static byte[] getFactoradic(BigInteger decimal, SetSpec spec) {
         if (factoradic == null) {
-            factoradic = FactoradicUtils.decimalToFactoradic(decimal, FactoradicUtils.DECK_SIZE);
+            factoradic = FactoradicUtils.decimalToFactoradic(decimal, spec.getLength());
         }
         return factoradic;
     }

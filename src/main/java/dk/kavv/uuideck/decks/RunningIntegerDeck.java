@@ -3,13 +3,13 @@ package dk.kavv.uuideck.decks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class RunningIntegerDeck implements DeckGenerator {
     @Override
-    public byte[] generate(Random r) {
-        List<Integer> deck = new ArrayList<>(IntStream.range(0, 52).boxed().toList());
+    public byte[] generate(SetSpec spec, Random r) {
+        int length = spec.getLength();
+        List<Integer> deck = new ArrayList<>(IntStream.range(0, length).boxed().toList());
         byte[] bytes = new byte[deck.size()];
         for (int i = 0; i < deck.size(); i++) {
             bytes[i] = deck.get(i).byteValue();
@@ -38,32 +38,5 @@ public class RunningIntegerDeck implements DeckGenerator {
         }
     }
 
-    @Override
-    public String present(byte[] bytes) {
-        // Alternatively, StringJoiner and for loop.
-        return IntStream.range(0, bytes.length)
-                .mapToObj(i -> toCard(bytes[i]))
-                .collect(Collectors.joining(", "));
-    }
 
-    @Override
-    public String toCard(byte b) {
-        int suit = b / 13;
-        int rank = b % 13;
-        String res = switch (rank) {
-            case 0 -> "A";
-            case 10 -> "J";
-            case 11 -> "Q";
-            case 12 -> "K";
-            default -> String.valueOf(rank + 1);
-        };
-        res += switch (suit) {
-            case 0 -> "S";
-            case 1 -> "C";
-            case 2 -> "D";
-            case 3 -> "H";
-            default -> throw new InvalidDeckException(b, suit);
-        };
-        return res;
-    }
 }
