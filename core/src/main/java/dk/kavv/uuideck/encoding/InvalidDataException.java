@@ -1,8 +1,6 @@
 package dk.kavv.uuideck.encoding;
 
-import dk.kavv.uuideck.errorhandling.ShortException;
-
-public class InvalidDataException extends RuntimeException implements ShortException {
+public class InvalidDataException extends RuntimeException {
     private static final String STANDARD_MESSAGE = "Malformed input could not be parsed";
 
     public InvalidDataException() {

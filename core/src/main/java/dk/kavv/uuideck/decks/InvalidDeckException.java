@@ -1,10 +1,9 @@
 package dk.kavv.uuideck.decks;
 
-import dk.kavv.uuideck.errorhandling.ShortException;
 import lombok.Getter;
 
 @Getter
-public class InvalidDeckException extends RuntimeException implements ShortException {
+public class InvalidDeckException extends RuntimeException {
     private final byte value;
     private final int suit;
 
