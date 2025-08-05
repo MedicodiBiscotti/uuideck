@@ -12,8 +12,9 @@
     <artifactId>uuideck-cli</artifactId>
 
     <properties>
-        <!--Format doesn't work-->
-        <!--<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>-->
+        <!-- Format works now for some reason. Also had to use property instead of maven.build.timestamp directly. -->
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
         <copyright.year>2025</copyright.year>
     </properties>
 
@@ -121,7 +122,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>sh</executable>
+                            <executable>bash</executable>
                             <arguments>
                                 <argument>scripts/install.sh</argument>
                             </arguments>

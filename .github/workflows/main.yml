@@ -37,8 +37,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            target/uuideck.jar
-            target/uuideck_completion
+            cli/target/uuideck.jar
+            cli/target/uuideck_completion
+            core/target/uuideck-core-*.jar
           body: ${{ steps.tag.outputs.msg }}
           generate_release_notes: true
           make_latest: legacy
