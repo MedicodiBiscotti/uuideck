@@ -1,13 +1,13 @@
 package dk.kavv.uuideck.encoding;
 
+import dk.kavv.uuideck.compression.BitCompressor;
 import dk.kavv.uuideck.compression.Compressor;
+import dk.kavv.uuideck.compression.CompressorType;
 import dk.kavv.uuideck.compression.NoOpCompressor;
-import dk.kavv.uuideck.compression.SixBitCompressor;
 import dk.kavv.uuideck.decks.SetSpec;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Constructs the right encoder setup based on input options.
@@ -18,25 +18,25 @@ public class EncoderFactory {
     private static final List<String> errors = new ArrayList<>();
 
     // SetSpec is temporarily part of the encoding step until bigger refactor. Only needed for decimal decoding.
-    public static Encoder getEncoder(Optional<Boolean> doCompression, EncoderType encoderType, SetSpec spec) {
+    public static Encoder getEncoder(CompressorType compressorType, EncoderType encoderType, SetSpec spec) {
         errors.clear();
         Encoder encoder = (encoderType != null) ? switch (encoderType) {
-            case base64 -> getBase64(doCompression);
-            case ascii -> getAscii(doCompression);
-            case decimal -> getDecimal(doCompression, spec);
-            case all -> getMulti(doCompression, spec);
-        } : getMulti(doCompression, spec);
+            case base64 -> getBase64(compressorType);
+            case ascii -> getAscii(compressorType);
+            case decimal -> getDecimal(compressorType, spec);
+            case all -> getMulti(compressorType, spec);
+        } : getMulti(compressorType, spec);
         if (!errors.isEmpty()) {
             throw new IncompatibleComponentsException(List.copyOf(errors));
         }
         return encoder;
     }
 
-    public static MultiEncoder getMulti(Optional<Boolean> doCompression, SetSpec spec) {
+    public static MultiEncoder getMulti(CompressorType compressorType, SetSpec spec) {
         // For now, ignore boolean.
         return new MultiEncoder(List.of(
                 new Base64Encoder(new NoOpCompressor()),
-                new Base64Encoder(new SixBitCompressor()),
+                new Base64Encoder(new BitCompressor()),
                 new AsciiEncoder(),
                 new DecimalEncoder(spec)
         ));
@@ -50,21 +50,21 @@ public class EncoderFactory {
     This is no longer accurate, but I liked that pipeline too.
      */
 
-    public static Base64Encoder getBase64(Optional<Boolean> doCompression) {
-        Compressor compressor = (doCompression.isEmpty() || doCompression.get()) ? new SixBitCompressor() : new NoOpCompressor();
+    public static Base64Encoder getBase64(CompressorType compressorType) {
+        Compressor compressor = (compressorType == null || compressorType == CompressorType.bit) ? new BitCompressor() : new NoOpCompressor();
         return new Base64Encoder(compressor);
     }
 
-    public static AsciiEncoder getAscii(Optional<Boolean> doCompression) {
-        if (doCompression.isPresent() && doCompression.get()) {
-            errors.add("6-bit compression incompatible with ASCII encoding");
+    public static AsciiEncoder getAscii(CompressorType compressorType) {
+        if (compressorType == CompressorType.bit) {
+            errors.add("Bit compression incompatible with ASCII encoding");
         }
         return new AsciiEncoder();
     }
 
-    public static DecimalEncoder getDecimal(Optional<Boolean> doCompression, SetSpec spec) {
-        if (doCompression.isPresent() && doCompression.get()) {
-            errors.add("6-bit compression incompatible with decimal encoding");
+    public static DecimalEncoder getDecimal(CompressorType compressorType, SetSpec spec) {
+        if (compressorType == CompressorType.bit) {
+            errors.add("Bit compression incompatible with decimal encoding");
         }
         return new DecimalEncoder(spec);
     }

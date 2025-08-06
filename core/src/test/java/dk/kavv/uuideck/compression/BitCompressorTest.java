@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-class SixBitCompressorTest {
-    private final SixBitCompressor compressor = new SixBitCompressor();
+class BitCompressorTest {
+    private final BitCompressor compressor = new BitCompressor();
 
     @Test
     void compress() {

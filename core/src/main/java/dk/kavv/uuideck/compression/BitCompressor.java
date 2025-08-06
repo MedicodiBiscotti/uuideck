@@ -2,7 +2,7 @@ package dk.kavv.uuideck.compression;
 
 import java.util.BitSet;
 
-public class SixBitCompressor implements Compressor {
+public class BitCompressor implements Compressor {
     /*
     BitSet both produces and reads as little-endian. As long as a BitSet or other LE parsing is used, this is fine.
     Can also be implemented with two BitSets of different lengths and indices, or String manipulation.

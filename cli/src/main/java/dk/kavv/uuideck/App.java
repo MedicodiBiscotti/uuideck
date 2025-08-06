@@ -1,5 +1,6 @@
 package dk.kavv.uuideck;
 
+import dk.kavv.uuideck.compression.CompressorType;
 import dk.kavv.uuideck.decks.*;
 import dk.kavv.uuideck.encoding.Encoder;
 import dk.kavv.uuideck.encoding.EncoderFactory;
@@ -15,7 +16,6 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 
-import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
@@ -40,8 +40,10 @@ public class App implements Callable<Integer> {
             "Options: ${COMPLETION-CANDIDATES}",
             "Default: all"})
     private EncoderType encoderType;
-    @Option(names = {"-c", "--compression"}, negatable = true, description = "Default: true")
-    private Optional<Boolean> doCompression;
+    @Option(names = {"-c", "--compression"}, description = {
+            "Options: ${COMPLETION-CANDIDATES}",
+            "Default: bit"})
+    private CompressorType compressorType;
     @Option(names = {"-T", "--set-type"}, description = {
             "Options: ${COMPLETION-CANDIDATES}",
             "Default: ${DEFAULT-VALUE}"})
@@ -68,7 +70,7 @@ public class App implements Callable<Integer> {
     public Integer call() throws Exception {
         try {
             setSpec = SetSpecFactory.getSpec(setType);
-            encoder = EncoderFactory.getEncoder(doCompression, encoderType, setSpec);
+            encoder = EncoderFactory.getEncoder(compressorType, encoderType, setSpec);
         } catch (IncompatibleComponentsException e) {
             throw new ParameterException(spec.commandLine(), String.join(System.lineSeparator(), e.getErrors()));
         }

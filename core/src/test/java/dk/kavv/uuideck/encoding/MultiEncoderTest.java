@@ -1,7 +1,7 @@
 package dk.kavv.uuideck.encoding;
 
+import dk.kavv.uuideck.compression.BitCompressor;
 import dk.kavv.uuideck.compression.NoOpCompressor;
-import dk.kavv.uuideck.compression.SixBitCompressor;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,7 +14,7 @@ class MultiEncoderTest {
         // Arrange
         Encoder encoder = new MultiEncoder(List.of(
                 new Base64Encoder(new NoOpCompressor()),
-                new Base64Encoder(new SixBitCompressor()),
+                new Base64Encoder(new BitCompressor()),
                 new AsciiEncoder()
         ));
         byte[] bytes = {47, 24, 25, 36, 15, 43, 51, 9, 23, 5, 34, 18, 48, 10, 31, 30, 39, 41, 42, 20, 37, 46, 1, 12, 7, 13, 38, 40, 19, 14, 6, 8, 32, 3, 0, 4, 27, 17, 50, 33, 16, 49, 26, 45, 21, 35, 22, 11, 2, 29, 28, 44};

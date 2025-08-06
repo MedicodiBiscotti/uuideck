@@ -1,6 +1,6 @@
 package dk.kavv.uuideck.encoding;
 
-import dk.kavv.uuideck.compression.SixBitCompressor;
+import dk.kavv.uuideck.compression.BitCompressor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ public class MultiEncoder implements Encoder {
         for (Encoder encoder : encoders) {
             if (encoder instanceof Base64Encoder) {
                 sb.append("Base64 ");
-                if (((Base64Encoder) encoder).getCompressor() instanceof SixBitCompressor) {
+                if (((Base64Encoder) encoder).getCompressor() instanceof BitCompressor) {
                     sb.append("(compressed):\t");
                 } else {
                     sb.append("(uncompressed):\t");
