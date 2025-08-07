@@ -2,11 +2,11 @@ package dk.kavv.uuideck.decks;
 
 public enum SetType {
     french,
-//    german,
+    //    german,
 //    swiss,
 //    italian,
 //    tarot,
 //    pokemon,
 //    customSet,
-//    customLength,
+    customLength,
 }

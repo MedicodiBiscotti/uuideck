@@ -49,6 +49,9 @@ public class App implements Callable<Integer> {
             "Default: ${DEFAULT-VALUE}"})
     private SetType setType = SetType.french;
 
+    @Option(names = {"-N", "custom-length"})
+    private Integer customLength;
+
     @Getter
     @Option(names = {"-v", "--verbose"}, description = {
             "Specify multiple -v options to increase verbosity.",
@@ -69,7 +72,7 @@ public class App implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         try {
-            setSpec = SetSpecFactory.getSpec(setType);
+            setSpec = SetSpecFactory.getSpec(setType, customLength);
             encoder = EncoderFactory.getEncoder(compressorType, encoderType, setSpec);
         } catch (IncompatibleComponentsException e) {
             throw new ParameterException(spec.commandLine(), String.join(System.lineSeparator(), e.getErrors()));

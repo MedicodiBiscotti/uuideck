@@ -21,7 +21,7 @@ public class EncoderFactory {
     public static Encoder getEncoder(CompressorType compressorType, EncoderType encoderType, SetSpec spec) {
         errors.clear();
         Encoder encoder = (encoderType != null) ? switch (encoderType) {
-            case base64 -> getBase64(compressorType);
+            case base64 -> getBase64(compressorType, spec);
             case ascii -> getAscii(compressorType);
             case decimal -> getDecimal(compressorType, spec);
             case all -> getMulti(compressorType, spec);
@@ -36,7 +36,7 @@ public class EncoderFactory {
         // For now, ignore boolean.
         return new MultiEncoder(List.of(
                 new Base64Encoder(new NoOpCompressor()),
-                new Base64Encoder(new BitCompressor()),
+                new Base64Encoder(new BitCompressor(spec)),
                 new AsciiEncoder(),
                 new DecimalEncoder(spec)
         ));
@@ -50,8 +50,8 @@ public class EncoderFactory {
     This is no longer accurate, but I liked that pipeline too.
      */
 
-    public static Base64Encoder getBase64(CompressorType compressorType) {
-        Compressor compressor = (compressorType == null || compressorType == CompressorType.bit) ? new BitCompressor() : new NoOpCompressor();
+    public static Base64Encoder getBase64(CompressorType compressorType, SetSpec spec) {
+        Compressor compressor = (compressorType == null || compressorType == CompressorType.bit) ? new BitCompressor(spec) : new NoOpCompressor();
         return new Base64Encoder(compressor);
     }
 
