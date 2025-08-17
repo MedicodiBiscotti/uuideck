@@ -7,6 +7,6 @@ public enum SetType {
 //    italian,
 //    tarot,
 //    pokemon,
-//    customSet,
+    customSet,
     customLength,
 }

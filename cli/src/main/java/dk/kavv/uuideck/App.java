@@ -10,12 +10,21 @@ import dk.kavv.uuideck.errorhandling.ShortBusinessExceptionHandler;
 import dk.kavv.uuideck.random.StringSeedGenerator;
 import dk.kavv.uuideck.version.PropertyVersionProvider;
 import lombok.Getter;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
@@ -51,6 +60,9 @@ public class App implements Callable<Integer> {
 
     @Option(names = {"-N", "custom-length"})
     private Integer customLength;
+    @Option(names = {"-F", "custom-set"})
+    private Path customSetPath;
+    private List<String> customSet;
 
     @Getter
     @Option(names = {"-v", "--verbose"}, description = {
@@ -62,7 +74,7 @@ public class App implements Callable<Integer> {
     private Encoder encoder;
     private SetSpec setSpec;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int exitCode = new CommandLine(new App())
                 .setExecutionExceptionHandler(new ShortBusinessExceptionHandler())
                 .execute(args);
@@ -72,7 +84,18 @@ public class App implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         try {
-            setSpec = SetSpecFactory.getSpec(setType, customLength);
+            if (customSetPath != null && customSetPath.toString().equals("-")) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                if (!reader.ready()) {
+                    throw new ParameterException(spec.commandLine(), "No data in standard in");
+                }
+                CSVParser csv = CSVFormat.DEFAULT.parse(reader);
+                customSet = new ArrayList<>();
+                for (CSVRecord record : csv) {
+                    customSet.addAll(record.toList());
+                }
+            }
+            setSpec = SetSpecFactory.getSpec(setType, customSet, customLength);
             encoder = EncoderFactory.getEncoder(compressorType, encoderType, setSpec);
         } catch (IncompatibleComponentsException e) {
             throw new ParameterException(spec.commandLine(), String.join(System.lineSeparator(), e.getErrors()));
