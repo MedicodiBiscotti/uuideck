@@ -23,10 +23,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
+import java.util.function.Predicate;
 
 import static picocli.CommandLine.ExitCode;
 import static picocli.CommandLine.Option;
@@ -90,10 +90,14 @@ public class App implements Callable<Integer> {
                     throw new ParameterException(spec.commandLine(), "No data in standard in");
                 }
                 CSVParser csv = CSVFormat.DEFAULT.parse(reader);
-                customSet = new ArrayList<>();
-                for (CSVRecord record : csv) {
-                    customSet.addAll(record.toList());
-                }
+                customSet = csv.stream()
+                        .flatMap(CSVRecord::stream)
+                        // stripping and filtering may be undesired but also smooths out user input.
+                        .map(String::strip)
+                        // isBlank also exist, but I think this might be more efficient if we strip anyway.
+                        // can use either Predicate.not or lambda.
+                        .filter(Predicate.not(String::isEmpty))
+                        .toList();
             }
             setSpec = SetSpecFactory.getSpec(setType, customSet, customLength);
             encoder = EncoderFactory.getEncoder(compressorType, encoderType, setSpec);
