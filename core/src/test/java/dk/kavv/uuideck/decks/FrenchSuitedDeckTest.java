@@ -10,6 +10,11 @@ class FrenchSuitedDeckTest {
     private final FrenchSuitedDeck deck = new FrenchSuitedDeck();
 
     @Test
+    void lengthIs52() {
+        assertEquals(52, deck.getLength());
+    }
+
+    @Test
     void lowestValueToCard() {
         assertEquals("AS", deck.elementName((byte) 0));
     }
