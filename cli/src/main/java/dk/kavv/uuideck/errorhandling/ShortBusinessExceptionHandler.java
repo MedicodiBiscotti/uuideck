@@ -3,6 +3,8 @@ package dk.kavv.uuideck.errorhandling;
 import dk.kavv.uuideck.App;
 import picocli.CommandLine;
 
+import java.nio.file.FileSystemException;
+
 import static picocli.CommandLine.IExecutionExceptionHandler;
 import static picocli.CommandLine.ParseResult;
 
@@ -15,7 +17,9 @@ public class ShortBusinessExceptionHandler implements IExecutionExceptionHandler
             throw ex;
         }
         if (ex instanceof ShortException) {
-            cmd.getErr().println(cmd.getColorScheme().errorText(ex.getMessage()));
+            printErr(cmd, ex.getMessage());
+        } else if (ex instanceof FileSystemException) {
+            printErr(cmd, "Could not access file: %s".formatted(((FileSystemException) ex).getFile()));
         } else {
             // Doesn't print red message
             // cmd.getErr().println(cmd.getColorScheme().stackTraceText(ex));
@@ -25,5 +29,9 @@ public class ShortBusinessExceptionHandler implements IExecutionExceptionHandler
         return cmd.getExitCodeExceptionMapper() != null
                 ? cmd.getExitCodeExceptionMapper().getExitCode(ex)
                 : cmd.getCommandSpec().exitCodeOnExecutionException();
+    }
+
+    private void printErr(CommandLine cmd, String text) {
+        cmd.getErr().println(cmd.getColorScheme().errorText(text));
     }
 }

@@ -20,6 +20,7 @@ import picocli.CommandLine.Spec;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
@@ -81,10 +82,15 @@ public class App implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         try {
-            if (customSetPath != null && customSetPath.toString().equals("-")) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                if (!reader.ready()) {
-                    throw new ParameterException(spec.commandLine(), "No data in standard in");
+            if (customSetPath != null) {
+                BufferedReader reader;
+                if (customSetPath.toString().equals("-")) {
+                    reader = new BufferedReader(new InputStreamReader(System.in));
+                    if (!reader.ready()) {
+                        throw new ParameterException(spec.commandLine(), "No data in standard in");
+                    }
+                } else {
+                    reader = Files.newBufferedReader(customSetPath);
                 }
                 customSet = CsvUtils.getElements(reader);
             }
