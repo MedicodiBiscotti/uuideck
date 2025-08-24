@@ -12,9 +12,9 @@ Ever wanted to generate a UUID that doubles as a deck of cards?
 - [x] Basic running integer deck
   generation ([Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle))
 - [x] Base64 encoding
-- [ ] Bit compression
+- [x] Bit compression
     - [x] 6-bit compression
-    - [ ] Variable bit compression
+    - [x] Variable bit compression
 - [x] ASCII encoding
 - [x] Seed random generation
     - [x] Number (64-bit)
@@ -27,9 +27,12 @@ Ever wanted to generate a UUID that doubles as a deck of cards?
 - [ ] [Factoradic](https://en.wikipedia.org/wiki/Factorial_number_system) encoding
     - [x] Permutation index
     - [ ] [Lehmer code](https://en.wikipedia.org/wiki/Lehmer_code)
+- [x] Different deck specifications, e.g. different size, suits, ranks, custom sets
+    - [x] Custom set as CSV from:
+        - [x] Standard in
+        - [x] File
 - [ ] JSON format
 - [ ] File output
-- [ ] Different deck specifications, e.g. different size, suits, ranks, custom sets
 - [ ] Web app API
 - [ ] Web app UI
 - [ ] ~~"Suit-signed" 6-bit deck generation (first 2 bits denote the suit)~~
