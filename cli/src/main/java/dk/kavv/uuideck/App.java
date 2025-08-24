@@ -98,6 +98,8 @@ public class App implements Callable<Integer> {
             encoder = EncoderFactory.getEncoder(compressorType, encoderType, setSpec);
         } catch (IncompatibleComponentsException e) {
             throw new ParameterException(spec.commandLine(), String.join(System.lineSeparator(), e.getErrors()));
+        } catch (IllegalArgumentException e) {
+            throw new ParameterException(spec.commandLine(), e.getMessage());
         }
         if (encoded != null) {
             try {

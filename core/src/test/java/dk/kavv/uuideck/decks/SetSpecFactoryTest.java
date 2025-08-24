@@ -23,6 +23,13 @@ class SetSpecFactoryTest {
         assertThrows(IllegalArgumentException.class, () -> SetSpecFactory.getSpec(SetType.customSet, null, null));
     }
 
+    // Inverse, both must be supplied.
+    @Test
+    void whenCustomSetAndNullThrowError2() {
+        assertThrows(IllegalArgumentException.class, () -> SetSpecFactory.getSpec(null, List.of("a", "b", "c"), null));
+    }
+
+
     @Test
     void whenCustomLengthAndProvidedReturnCustomLength() {
         assertInstanceOf(CustomLengthSet.class, SetSpecFactory.getSpec(SetType.customLength, null, 3));
@@ -31,5 +38,11 @@ class SetSpecFactoryTest {
     @Test
     void whenCustomLengthAndNullThrowError() {
         assertThrows(IllegalArgumentException.class, () -> SetSpecFactory.getSpec(SetType.customLength, null, null));
+    }
+
+    // Inverse, both must be supplied.
+    @Test
+    void whenCustomLengthAndNullThrowError2() {
+        assertThrows(IllegalArgumentException.class, () -> SetSpecFactory.getSpec(null, null, 3));
     }
 }
