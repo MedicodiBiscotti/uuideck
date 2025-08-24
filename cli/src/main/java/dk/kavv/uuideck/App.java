@@ -8,11 +8,9 @@ import dk.kavv.uuideck.encoding.EncoderType;
 import dk.kavv.uuideck.encoding.IncompatibleComponentsException;
 import dk.kavv.uuideck.errorhandling.ShortBusinessExceptionHandler;
 import dk.kavv.uuideck.random.StringSeedGenerator;
+import dk.kavv.uuideck.utils.CsvUtils;
 import dk.kavv.uuideck.version.PropertyVersionProvider;
 import lombok.Getter;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
@@ -26,7 +24,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
-import java.util.function.Predicate;
 
 import static picocli.CommandLine.ExitCode;
 import static picocli.CommandLine.Option;
@@ -89,15 +86,7 @@ public class App implements Callable<Integer> {
                 if (!reader.ready()) {
                     throw new ParameterException(spec.commandLine(), "No data in standard in");
                 }
-                CSVParser csv = CSVFormat.DEFAULT.parse(reader);
-                customSet = csv.stream()
-                        .flatMap(CSVRecord::stream)
-                        // stripping and filtering may be undesired but also smooths out user input.
-                        .map(String::strip)
-                        // isBlank also exist, but I think this might be more efficient if we strip anyway.
-                        // can use either Predicate.not or lambda.
-                        .filter(Predicate.not(String::isEmpty))
-                        .toList();
+                customSet = CsvUtils.getElements(reader);
             }
             setSpec = SetSpecFactory.getSpec(setType, customSet, customLength);
             encoder = EncoderFactory.getEncoder(compressorType, encoderType, setSpec);
