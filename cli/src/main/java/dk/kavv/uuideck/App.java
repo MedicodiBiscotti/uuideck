@@ -82,6 +82,11 @@ public class App implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         try {
+            /*
+            1. Read from stdin.
+            2. Read from file.
+            3. Read from data directory.
+             */
             if (customSetPath != null) {
                 BufferedReader reader;
                 if (customSetPath.toString().equals("-")) {
@@ -89,8 +94,13 @@ public class App implements Callable<Integer> {
                     if (!reader.ready()) {
                         throw new ParameterException(spec.commandLine(), "No data in standard in");
                     }
-                } else {
+                } else if (Files.exists(customSetPath)) {
                     reader = Files.newBufferedReader(customSetPath);
+                } else {
+                    Path dataDir = Path.of(System.getenv("UUIDECK_DATA_DIR"));
+                    Path customSetPathInDataDir = dataDir.resolve(customSetPath);
+                    // Let it fail if the file doesn't exist.
+                    reader = Files.newBufferedReader(customSetPathInDataDir);
                 }
                 customSet = CsvUtils.getElements(reader);
             }

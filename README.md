@@ -31,6 +31,7 @@ Ever wanted to generate a UUID that doubles as a deck of cards?
     - [x] Custom set as CSV from:
         - [x] Standard in
         - [x] File
+        - [x] Library directory
 - [ ] JSON format
 - [ ] File output
 - [ ] Web app API
