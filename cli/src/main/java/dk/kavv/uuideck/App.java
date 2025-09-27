@@ -84,32 +84,8 @@ public class App implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         try {
-            /*
-            1. Read from stdin.
-            2. Read from file.
-            3. Read from data directory.
-             */
             if (customSetPath != null) {
-                BufferedReader reader;
-                if (customSetPath.toString().equals("-")) {
-                    reader = new BufferedReader(new InputStreamReader(System.in));
-                    if (!reader.ready()) {
-                        throw new ParameterException(spec.commandLine(), "No data in standard in");
-                    }
-                } else if (Files.exists(customSetPath)) {
-                    reader = Files.newBufferedReader(customSetPath);
-                } else {
-                    String dataDir = System.getenv("UUIDECK_DATA_DIR");
-                    if (dataDir == null) {
-                        throw new MissingConfiguratonException("UUIDECK_DATA_DIR is not set");
-                    }
-                    Path customSetPathInDataDir = Path.of(dataDir).resolve(customSetPath);
-                    if (!Files.exists(customSetPathInDataDir)) {
-                        throw new NoSuchFileException(customSetPath.toString());
-                    }
-                    reader = Files.newBufferedReader(customSetPathInDataDir);
-                }
-                customSet = CsvUtils.getElements(reader);
+                customSet = getCustomSet(customSetPath);
             }
             setSpec = SetSpecFactory.getSpec(setType, customSet, customLength);
             encoder = EncoderFactory.getEncoder(compressorType, encoderType, setSpec);
@@ -128,6 +104,34 @@ public class App implements Callable<Integer> {
             generateDeck();
         }
         return ExitCode.OK;
+    }
+
+    /*
+    1. Read from stdin.
+    2. Read from file.
+    3. Read from data directory.
+     */
+    public List<String> getCustomSet(Path path) throws IOException {
+        BufferedReader reader;
+        if (path.toString().equals("-")) {
+            reader = new BufferedReader(new InputStreamReader(System.in));
+            if (!reader.ready()) {
+                throw new ParameterException(spec.commandLine(), "No data in standard in");
+            }
+        } else if (Files.exists(path)) {
+            reader = Files.newBufferedReader(path);
+        } else {
+            String dataDir = System.getenv("UUIDECK_DATA_DIR");
+            if (dataDir == null) {
+                throw new MissingConfiguratonException("UUIDECK_DATA_DIR is not set");
+            }
+            Path pathInDataDir = Path.of(dataDir).resolve(path);
+            if (!Files.exists(pathInDataDir)) {
+                throw new NoSuchFileException(path.toString());
+            }
+            reader = Files.newBufferedReader(pathInDataDir);
+        }
+        return customSet = CsvUtils.getElements(reader);
     }
 
     public void decodeDeck(String in) {
