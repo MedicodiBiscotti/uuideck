@@ -6,6 +6,7 @@ import dk.kavv.uuideck.encoding.Encoder;
 import dk.kavv.uuideck.encoding.EncoderFactory;
 import dk.kavv.uuideck.encoding.EncoderType;
 import dk.kavv.uuideck.encoding.IncompatibleComponentsException;
+import dk.kavv.uuideck.errorhandling.MissingConfiguratonException;
 import dk.kavv.uuideck.errorhandling.ShortBusinessExceptionHandler;
 import dk.kavv.uuideck.random.StringSeedGenerator;
 import dk.kavv.uuideck.utils.CsvUtils;
@@ -21,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
@@ -97,9 +99,14 @@ public class App implements Callable<Integer> {
                 } else if (Files.exists(customSetPath)) {
                     reader = Files.newBufferedReader(customSetPath);
                 } else {
-                    Path dataDir = Path.of(System.getenv("UUIDECK_DATA_DIR"));
-                    Path customSetPathInDataDir = dataDir.resolve(customSetPath);
-                    // Let it fail if the file doesn't exist.
+                    String dataDir = System.getenv("UUIDECK_DATA_DIR");
+                    if (dataDir == null) {
+                        throw new MissingConfiguratonException("UUIDECK_DATA_DIR is not set");
+                    }
+                    Path customSetPathInDataDir = Path.of(dataDir).resolve(customSetPath);
+                    if (!Files.exists(customSetPathInDataDir)) {
+                        throw new NoSuchFileException(customSetPath.toString());
+                    }
                     reader = Files.newBufferedReader(customSetPathInDataDir);
                 }
                 customSet = CsvUtils.getElements(reader);
