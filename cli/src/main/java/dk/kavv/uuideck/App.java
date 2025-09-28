@@ -121,6 +121,7 @@ public class App implements Callable<Integer> {
         } else if (Files.exists(path)) {
             reader = Files.newBufferedReader(path);
         } else {
+            // Would be nice if files in data dir could be in completion.
             String dataDir = System.getenv("UUIDECK_DATA_DIR");
             if (dataDir == null) {
                 throw new MissingConfiguratonException("UUIDECK_DATA_DIR is not set");

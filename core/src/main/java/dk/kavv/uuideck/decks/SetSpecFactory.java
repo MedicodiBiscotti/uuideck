@@ -13,6 +13,10 @@ public class SetSpecFactory {
         }
         return (setType != null) ? switch (setType) {
             case french -> new FrenchSuitedDeck();
+            case german -> new GermanSuitedDeck();
+            case swiss -> new SwissSuitedDeck();
+            case italian -> new ItalianSuitedDeck();
+            case tarot -> new TarotDeck();
             case customSet -> new CustomSet(customSet);
             case customLength -> new CustomLengthSet(customLength);
         } : new FrenchSuitedDeck();
