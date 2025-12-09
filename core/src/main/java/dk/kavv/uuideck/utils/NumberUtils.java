@@ -113,6 +113,7 @@ public class NumberUtils {
             "uncentillion",
             "duocentillion",
     };
+    private static final String ZERO = "zero";
 
     /**
      * Spells out a number in text.
@@ -126,9 +127,10 @@ public class NumberUtils {
     Can use the Conway–Guy system to create names for arbitrarily large numbers beyond 10^309 of my static list. More difficult to implement.
     10^309 should be enough for 171! (factorial).
     You can verify results with https://www.calculatorsoup.com/calculators/conversions/numberstowords.php.
+    TODO different strategies for decimals: "point one two" vs "and 12/100"
      */
     public static String toText(Number number) {
-        if (number.intValue() == 0) return "zero";
+        if (number.intValue() == 0) return ZERO;
         String s = number.toString();
         // I'd rather pad once than check for length every time.
         String padded = padToGroupOfThree(number);
