@@ -157,7 +157,7 @@ public class NumberUtils {
                 sb.append(ONES[hundreds]).append(" ").append(HUNDRED).append(" ");
             }
             if (tens == 1) {
-                sb.append(TEN_TO_NINETEEN[ones]);
+                sb.append(TEN_TO_NINETEEN[ones]).append(" ");
             } else if (tens != 0) {
                 sb.append(TENS[tens]);
                 if (ones != 0) {

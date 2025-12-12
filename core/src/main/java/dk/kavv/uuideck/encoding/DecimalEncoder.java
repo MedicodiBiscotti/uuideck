@@ -3,6 +3,7 @@ package dk.kavv.uuideck.encoding;
 import dk.kavv.uuideck.compression.NoOpCompressor;
 import dk.kavv.uuideck.decks.SetSpec;
 import dk.kavv.uuideck.utils.FactoradicUtils;
+import dk.kavv.uuideck.utils.NumberUtils;
 
 import java.math.BigInteger;
 
@@ -18,7 +19,8 @@ public class DecimalEncoder extends AbstractFactoradicEncoder {
     public String encode(byte[] bytes) {
         byte[] lehmer = getFactoradic(bytes);
         BigInteger decimal = getDecimal(lehmer);
-        return base64Encoder.encode(decimal.toByteArray()) + " " + decimal;
+        String decimalString = NumberUtils.toText(decimal);
+        return base64Encoder.encode(decimal.toByteArray()) + " " + decimal + " " + decimalString;
     }
 
     @Override
