@@ -9,7 +9,8 @@ public class NumberUtils {
     public static final String[] TEN_TO_NINETEEN = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
     public static final String[] TENS = {"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
     public static final String HUNDRED = "hundred";
-    public static final String[] THOUSANDS = {"thousand",
+    public static final String[] THOUSANDS = {"",
+            "thousand",
             "million",
             "billion",
             "trillion",
@@ -127,14 +128,49 @@ public class NumberUtils {
     Can use the Conway–Guy system to create names for arbitrarily large numbers beyond 10^309 of my static list. More difficult to implement.
     10^309 should be enough for 171! (factorial).
     You can verify results with https://www.calculatorsoup.com/calculators/conversions/numberstowords.php.
+
+    These aren't needed but:
     TODO different strategies for decimals: "point one two" vs "and 12/100"
+    TODO negative numbers
      */
     public static String toText(Number number) {
-        if (number.intValue() == 0) return ZERO;
         String s = number.toString();
+        if (s.equals("0") || s.equals("0.0")) {
+            return ZERO;
+        }
         // I'd rather pad once than check for length every time.
         String padded = padToGroupOfThree(number);
-        return ONES[number.intValue()];
+
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        int group = padded.length() / 3;
+        while (i < padded.length()) {
+            // Increment i 3 times, and decrement group 1 time.
+            int hundreds = padded.charAt(i++) - '0';
+            int tens = padded.charAt(i++) - '0';
+            int ones = padded.charAt(i++) - '0';
+            group--; // We happen to need -1 anyway.
+            if (hundreds == 0 && tens == 0 && ones == 0) {
+                continue;
+            }
+            if (hundreds != 0) {
+                sb.append(ONES[hundreds]).append(" ").append(HUNDRED).append(" ");
+            }
+            if (tens == 1) {
+                sb.append(TEN_TO_NINETEEN[ones]);
+            } else if (tens != 0) {
+                sb.append(TENS[tens]);
+                if (ones != 0) {
+                    sb.append("-").append(ONES[ones]);
+                }
+                sb.append(" ");
+            } else if (ones != 0) {
+                sb.append(ONES[ones]).append(" ");
+            }
+            sb.append(THOUSANDS[group]).append(" ");
+        }
+
+        return sb.toString().trim();
     }
 
     /**
