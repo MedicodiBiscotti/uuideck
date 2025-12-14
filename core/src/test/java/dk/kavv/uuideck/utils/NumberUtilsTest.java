@@ -63,4 +63,10 @@ class NumberUtilsTest {
                 "eighty unvigintillion six hundred fifty-eight vigintillion one hundred seventy-five novemdecillion one hundred seventy octodecillion nine hundred forty-three septendecillion eight hundred seventy-eight sexdecillion five hundred seventy-one quindecillion six hundred sixty quattuordecillion six hundred thirty-six tredecillion eight hundred fifty-six duodecillion four hundred three undecillion seven hundred sixty-six decillion nine hundred seventy-five nonillion two hundred eighty-nine octillion five hundred five septillion four hundred forty sextillion eight hundred eighty-three quintillion two hundred seventy-seven quadrillion eight hundred twenty-four trillion",
                 NumberUtils.toText(new BigInteger("80658175170943878571660636856403766975289505440883277824000000000000")));
     }
+
+    @ParameterizedTest
+    @CsvSource({"1,3,2,33.33%"})
+    void bigPercentage(BigInteger numerator, BigInteger denominator, int precision, String expected) {
+        assertEquals(expected, NumberUtils.bigPercentage(numerator, denominator, precision));
+    }
 }

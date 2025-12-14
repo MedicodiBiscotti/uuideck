@@ -29,12 +29,15 @@ public class MultiEncoder implements Encoder {
                 sb.append("ASCII:\t\t\t");
                 sb.append(encoder.encode(bytes));
             } else if (encoder instanceof DecimalEncoder) {
-                String[] ss = encoder.encode(bytes).split(" ", 3);
+                String[] ss = encoder.encode(bytes).split(" ", 4);
                 sb.append("Decimal (encoded):\t");
                 sb.append(ss[0]).append(System.lineSeparator());
                 sb.append("Decimal:\t\t");
-                sb.append(ss[1]);
-                sb.append(System.lineSeparator()).append("Decimal name:\t\t").append(ss[2]);
+                sb.append(ss[1]).append(System.lineSeparator());
+                sb.append("Decimal percentage:\t");
+                sb.append(ss[2]).append(System.lineSeparator());
+                sb.append("Decimal name:\t\t");
+                sb.append(ss[3]);
             }
             sj.add(sb);
             sb.delete(0, sb.length()); // or sb.setLength(0);

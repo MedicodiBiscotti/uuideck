@@ -2,6 +2,10 @@ package dk.kavv.uuideck.utils;
 
 import lombok.experimental.UtilityClass;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+
 @UtilityClass
 public class NumberUtils {
 
@@ -184,5 +188,10 @@ public class NumberUtils {
         int remainder = s.length() % 3;
         if (remainder == 0) return s;
         return "0".repeat(3 - remainder) + s;
+    }
+
+    public static String bigPercentage(BigInteger numerator, BigInteger denominator, int precision) {
+        BigDecimal bd = new BigDecimal(numerator.multiply(BigInteger.valueOf(100))).divide(new BigDecimal(denominator), precision, RoundingMode.HALF_UP);
+        return bd + "%";
     }
 }

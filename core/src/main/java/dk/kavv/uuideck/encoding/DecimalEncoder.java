@@ -20,7 +20,9 @@ public class DecimalEncoder extends AbstractFactoradicEncoder {
         byte[] lehmer = getFactoradic(bytes);
         BigInteger decimal = getDecimal(lehmer);
         String decimalString = NumberUtils.toText(decimal);
-        return base64Encoder.encode(decimal.toByteArray()) + " " + decimal + " " + decimalString;
+        String percentageString = NumberUtils.bigPercentage(decimal, FactoradicUtils.factorial(spec.getLength()), 4);
+        // This is getting ridiculous.
+        return base64Encoder.encode(decimal.toByteArray()) + " " + decimal + " " + percentageString + " " + decimalString;
     }
 
     @Override
