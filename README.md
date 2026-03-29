@@ -27,6 +27,8 @@ Ever wanted to generate a UUID that doubles as a deck of cards?
 - [ ] [Factoradic](https://en.wikipedia.org/wiki/Factorial_number_system) encoding
     - [x] Permutation index
     - [ ] [Lehmer code](https://en.wikipedia.org/wiki/Lehmer_code)
+- [ ] Hexadecimal colour codes (8, 16, and 24 bit)
+- [ ] Bar code/QR code encoding
 - [x] Different deck specifications, e.g. different size, suits, ranks, custom sets
     - [x] Custom set as CSV from:
         - [x] Standard in
