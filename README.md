@@ -26,6 +26,8 @@ Ever wanted to generate a UUID that doubles as a deck of cards?
 - [ ] Raw encoding showing underlying raw data
 - [ ] [Factoradic](https://en.wikipedia.org/wiki/Factorial_number_system) encoding
     - [x] Permutation index
+        - [x] Name of number
+        - [x] Percentage out of maximum permutation
     - [ ] [Lehmer code](https://en.wikipedia.org/wiki/Lehmer_code)
 - [ ] Hexadecimal colour codes (8, 16, and 24 bit)
 - [ ] Bar code/QR code encoding
