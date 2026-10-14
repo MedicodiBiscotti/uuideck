@@ -7,6 +7,18 @@ And ~99.999% of those are solvable games of FreeCell.
 
 Ever wanted to generate a UUID that doubles as a deck of cards?
 
+```shell
+$ uuideck -n0
+9H, QC, KC, JD, 3C, 5H, KH, 10S, JC, 6S, 9D, 6C, 10H, JS, 6D, 5D, AH, 3H, 4H, 8C, QD, 8H, 2S, KS, 8S, AC, KD, 2H, 7C, 2C, 7S, 9S, 7D, 4S, AS, 5S, 2D, 5C, QH, 8D, 4C, JH, AD, 7H, 9C, 10D, 10C, QS, 3S, 4D, 3D, 6H
+Base64 (uncompressed):  LxgZJA8rMwkXBSISMAofHicpKhQlLgEMBw0mKBMOBgggAwAEGxEyIRAxGi0VIxYLAh0cLA==
+Base64 (compressed):    L5aRzzonVyFKsPJ5Z6pSpRswR2Oik2Mg4AAQWySHUKy11WgtQsex
+ASCII:                  W@AL7S[1?-J:X2GFOQR<MV)4/5NP;6.0H+(,C9ZI8YBU=K>3*EDT
+Decimal (encoded):      ArtTQ4JKEJt8d2qiVxkL8IGjl4_Mo4h1Zh2exHo=
+Decimal:                73647544578574144870055376110498167205349048242740685691975840482426
+Decimal percentage:     91.3082%
+Decimal name:           seventy-three unvigintillion six hundred forty-seven vigintillion five hundred forty-four novemdecillion five hundred seventy-eight octodecillion five hundred seventy-four septendecillion one hundred forty-four sexdecillion eight hundred seventy quindecillion fifty-five quattuordecillion three hundred seventy-six tredecillion one hundred ten duodecillion four hundred ninety-eight undecillion one hundred sixty-seven decillion two hundred five nonillion three hundred forty-nine octillion forty-eight septillion two hundred forty-two sextillion seven hundred forty quintillion six hundred eighty-five quadrillion six hundred ninety-one trillion nine hundred seventy-five billion eight hundred forty million four hundred eighty-two thousand four hundred twenty-six
+```
+
 ## Planned features
 
 - [x] Basic running integer deck
